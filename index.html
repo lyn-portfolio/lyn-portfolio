@@ -404,7 +404,7 @@ html.intro-on .reveal,html.intro-on .reveal.active{opacity:0 !important;transfor
 #intro .intro-greet{transition:opacity .5s ease}
 #intro.p-welcome .intro-greet{opacity:0}
 #intro .g{position:absolute;white-space:nowrap;font-family:'Great Vibes',cursive;font-size:clamp(3rem,15vw,4.7rem);line-height:1.1;color:var(--i-accent);
-  opacity:0;transform:translateY(16px);transition:opacity .7s ease,transform .9s cubic-bezier(.2,.7,.2,1)}
+  opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
 #intro .g.show{opacity:1;transform:none}
 #intro .g.out{opacity:0;transform:translateY(-16px)}
 
@@ -556,15 +556,15 @@ html:has(#toTop.show) #chatNudge{right:calc(1.25rem + 48px + 1rem);max-width:min
 @media(max-width:639px){.h2-head{flex-direction:column;align-items:flex-start;gap:1rem}.h2-photo{width:128px;height:128px}}
 </style>
 <style id="back-home-css">
-.back-home-wrap{display:none;max-width:80rem;margin:3.5rem auto 0;text-align:center}
+.back-home-wrap{display:none;max-width:80rem;margin:3.5rem auto 0;text-align:left}
 .back-home-wrap.narrow{max-width:68rem}
 body.mode-page .back-home-wrap{display:block}
-.back-home{display:inline-flex;align-items:center;justify-content:center;gap:.75rem;min-height:3.25rem;padding:.8rem 2rem;border:1.5px solid var(--accent);border-radius:999px;font-size:.95rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);background:transparent;-webkit-tap-highlight-color:transparent;transition:background .3s,color .3s,transform .3s,box-shadow .3s}
+.back-home{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;min-height:2.5rem;padding:.5rem 1.25rem;border:1.5px solid var(--accent);border-radius:999px;font-size:.78rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);background:transparent;-webkit-tap-highlight-color:transparent;transition:background .3s,color .3s,transform .3s,box-shadow .3s}
 .back-home:hover,.back-home:active{background:var(--accent);color:#fff;transform:translateY(-2px);box-shadow:0 12px 24px -10px rgba(184,92,56,.55)}
 .back-home span{display:inline-block;transition:transform .3s}
 .back-home:hover span{transform:translateX(-5px)}
 .back-home:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
-@media(max-width:639px){.back-home{width:100%;max-width:22rem}}
+@media(max-width:639px){.back-home-wrap{padding-left:1.5rem;padding-right:1.5rem}}
 </style>
 <style id="tools-marquee">
 .tm-head{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:2.5rem}
@@ -661,7 +661,7 @@ html[data-theme="dark"] .tm-btn:hover,html[data-theme="dark"] .tm-btn[aria-expan
     var fill = document.getElementById('introFill'), pctEl = document.getElementById('introPct'), skip = document.getElementById('introSkip');
     var greets = el.querySelectorAll('.g');
     var t0 = performance.now(), seqStart = null, p = 0, lastPct = -1, done = false, ready = document.readyState === 'complete';
-    var TARGET = reduced ? 3200 : 7400;               // <<< INTRO LENGTH: ms from page open until the curtain starts to open
+    var TARGET = reduced ? 3200 : 4800;               // <<< INTRO LENGTH: ms from page open until the curtain starts to open
     var SEQ = 3000;                                    // (worked out in begin() from TARGET)
     window.addEventListener('load', function () { ready = true; });
 
@@ -698,7 +698,7 @@ html[data-theme="dark"] .tm-btn:hover,html[data-theme="dark"] .tm-btn[aria-expan
     function begin() {
         if (done) return;
         seqStart = performance.now();
-        SEQ = Math.max(TARGET - (seqStart - t0), reduced ? 2400 : 6800) - 300;   // fonts loading late never shortens the welcome
+        SEQ = Math.max(TARGET - (seqStart - t0), reduced ? 2400 : 4200) - 300;   // fonts loading late never shortens the welcome
         el.classList.add('is-live');
         if (reduced) {                                                    // calm version: straight to the welcome text
             el.classList.add('p-welcome');
@@ -712,8 +712,8 @@ html[data-theme="dark"] .tm-btn:hover,html[data-theme="dark"] .tm-btn[aria-expan
             i++;
             if (i >= greets.length) { clearInterval(iv); return; }
             show(i);
-        }, 1150);                                                     // each greeting stays ~1.15s
-        if (!reduced) setTimeout(function () { if (!done) el.classList.add('p-welcome'); }, 4750);
+        }, 700);                                                      // each greeting stays ~0.7s
+        if (!reduced) setTimeout(function () { if (!done) el.classList.add('p-welcome'); }, 2950);
         setTimeout(function wait() {
             if (done) return;
             if (ready || performance.now() - t0 > 9000) finish(); else setTimeout(wait, 120);
