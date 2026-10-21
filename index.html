@@ -2,7 +2,7 @@
 <html lang="en" class="scroll-smooth">
 <head>
     <script>try{if(localStorage.getItem("theme")==="dark")document.documentElement.setAttribute("data-theme","dark")}catch(e){}</script>
-    <script>(function(){try{var d=document.documentElement;d.classList.add("intro-on");if(window.matchMedia("(prefers-reduced-motion: reduce)").matches)d.classList.add("intro-reduced");setTimeout(function(){d.classList.remove("intro-on")},17000)}catch(e){}})();</script>
+    <script>(function(){try{var d=document.documentElement;d.classList.add("intro-on");setTimeout(function(){d.classList.remove("intro-on")},17000)}catch(e){}})();</script>
     <meta name="color-scheme" content="light dark">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, viewport-fit=cover">
@@ -1487,8 +1487,7 @@ html[data-theme="dark"] .tm-btn:hover,html[data-theme="dark"] .tm-btn[aria-expan
         }
         document.querySelectorAll('[data-contact]').forEach(function (a) {
             a.addEventListener('click', function (e) {
-                if (isPhoneOrTablet()) return;   // smartphone: let tel: / mailto: do their job
-                e.preventDefault();
+                e.preventDefault();   // every device: show the contact popup (the tel:/mailto: href stays as a no-JS fallback)
                 openModal(a.dataset.contact);
             });
         });
