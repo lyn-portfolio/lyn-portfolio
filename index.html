@@ -250,6 +250,7 @@
         .theme-btn .ico-moon { display:none; } html[data-theme="dark"] .theme-btn .ico-sun { display:none; } html[data-theme="dark"] .theme-btn .ico-moon { display:block; }
         .hire-btn { display:none; padding:.6rem 1.15rem; border:1.5px solid var(--ink); border-radius:.7rem; font-size:.8rem; font-weight:700; color:var(--ink); transition:all .3s; }
         #mobileMenu a { font-family:'Cormorant Garamond',Georgia,serif; font-size:1.45rem; font-weight:700; letter-spacing:.005em; text-transform:none; }
+        .c-why { display:block; margin-top:.5rem; font-size:.75rem; opacity:.75; word-break:break-word; }
         .hire-btn:hover { background:var(--ink); color:var(--on-ink); }
         @media (min-width:1100px) { .site-links { display:flex; } .hire-btn { display:block; } .site-burger { display:none !important; } #mobileMenu { display:none !important; } }
         @media (max-width:1023px) { header.site-nav { background:var(--nav-bg2) !important; } }
@@ -1119,7 +1120,7 @@
     const f = document.getElementById('contactForm'); if (!f) return;
     const st = document.getElementById('formStatus'), el = f.elements, btn = f.querySelector('.c-send');
     const to = f.dataset.email, wa = f.dataset.wa, enc = encodeURIComponent;
-    function fallback(name, mail, msg) {
+    function fallback(name, mail, msg, why) {
         const subj = 'Portfolio inquiry from ' + name, body = msg + '\n\n- ' + name + ' (' + mail + ')';
         st.innerHTML = 'I couldn’t send it automatically, but your message is ready. Pick how you’d like to send it:' +
             '<span class="c-alt">' +
@@ -1127,18 +1128,29 @@
             '<a href="mailto:' + to + '?subject=' + enc(subj) + '&body=' + enc(body) + '"><i class="fas fa-paper-plane"></i> Email app</a>' +
             (wa ? '<a target="_blank" rel="noopener noreferrer" href="https://wa.me/' + wa + '?text=' + enc(subj + '\n\n' + msg) + '"><i class="fab fa-whatsapp"></i> WhatsApp</a>' : '') +
             '</span>';
+        if (why) { const n = document.createElement('small'); n.className = 'c-why'; n.textContent = 'Technical note: ' + why; st.appendChild(n); }
     }
+    // returns {ok:true} or {ok:false, reason:'...'}; throws only on network problems
     async function deliver(name, mail, msg) {
-        const bot = !!el['_honey'].value, subject = 'Portfolio inquiry from ' + name;
+        const subject = 'Portfolio inquiry from ' + name;
         const key = (f.dataset.w3fKey || '').trim();
-        const url = key ? 'https://api.web3forms.com/submit' : 'https://formsubmit.co/ajax/' + to;
-        const payload = key
-            ? { access_key: key, subject: subject, from_name: 'Portfolio', name: name, email: mail, message: msg, botcheck: bot }
-            : { name: name, email: mail, message: msg, _replyto: mail, _subject: subject, _template: 'table', _captcha: 'false', _honey: el['_honey'].value };
-        const r = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(payload) });
-        const d = await r.json();
-        if (r.ok && (d.success === true || d.success === 'true')) return true;
-        console.warn('Contact form not sent:', d.message || r.status); return false;
+        let r;
+        if (key) {
+            // Web3Forms: plain form-data POST (no preflight request needed)
+            const fd = new FormData();
+            fd.append('access_key', key); fd.append('subject', subject); fd.append('from_name', 'Portfolio');
+            fd.append('name', name); fd.append('email', mail); fd.append('message', msg);
+            fd.append('botcheck', el['_honey'].value ? 'true' : '');
+            r = await fetch('https://api.web3forms.com/submit', { method: 'POST', headers: { 'Accept': 'application/json' }, body: fd });
+        } else {
+            const payload = { name: name, email: mail, message: msg, _replyto: mail, _subject: subject, _template: 'table', _captcha: 'false', _honey: el['_honey'].value };
+            r = await fetch('https://formsubmit.co/ajax/' + to, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(payload) });
+        }
+        let d = null; try { d = await r.json(); } catch (e) {}
+        if (r.ok && d && (d.success === true || d.success === 'true')) return { ok: true };
+        const reason = 'HTTP ' + r.status + (d && d.message ? ' - ' + d.message : '');
+        console.warn('Contact form not sent:', reason, d);
+        return { ok: false, reason: reason };
     }
     f.addEventListener('submit', async function (e) {
         e.preventDefault();
@@ -1147,10 +1159,14 @@
         ['name', 'email', 'message'].forEach(k => el[k].parentElement.classList.toggle('invalid', !ok[k]));
         if (!ok.name || !ok.email || !ok.message) { st.textContent = 'Please add your name, a valid email and your message.'; return; }
         btn.disabled = true; st.textContent = 'Sending…';
-        let sent = false;
-        try { sent = await deliver(name, mail, msg); } catch (err) { console.warn('Contact form error:', err); }
-        if (sent) { st.textContent = 'Thank you! Your message was sent. I’ll get back to you soon.'; f.reset(); }
-        else fallback(name, mail, msg);
+        let res;
+        try { res = await deliver(name, mail, msg); }
+        catch (err) {
+            console.warn('Contact form error:', err);
+            res = { ok: false, reason: (location.protocol === 'file:' ? 'This page is opened as a local file, and browsers block sending from there. It works once the site is hosted online. ' : '') + (err && err.message ? '(' + err.message + ')' : 'Network error') };
+        }
+        if (res.ok) { st.textContent = 'Thank you! Your message was sent. I’ll get back to you soon.'; f.reset(); }
+        else fallback(name, mail, msg, res.reason);
         btn.disabled = false;
     });
 })();
