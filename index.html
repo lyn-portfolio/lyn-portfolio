@@ -542,6 +542,8 @@ html.intro-on #chatFab, html.intro-on #chatNudge { opacity:0; pointer-events:non
 .h2-chip{display:inline-flex;align-items:center;gap:.4rem;padding:0 .65rem;border:1px solid var(--line);border-radius:.5rem;background:var(--panel);font-size:.88rem;line-height:1.7;color:var(--ink);white-space:nowrap}
 .h2-chip i{font-size:.8em;color:var(--accent)}
 .tool-icon svg{width:22px;height:22px;flex:none}
+/* keep the chat nudge clear of the back-to-top button while that button is showing */
+html:has(#toTop.show) #chatNudge{right:calc(1.25rem + 48px + 1rem);max-width:min(15rem,calc(100vw - 7.5rem))}
 @media(max-width:639px){.h2-head{flex-direction:column;align-items:flex-start;gap:1rem}.h2-photo{width:128px;height:128px}}
 </style>
 </head>
@@ -726,7 +728,7 @@ html.intro-on #chatFab, html.intro-on #chatNudge { opacity:0; pointer-events:non
                         Profile Photo
                     </div></div>
                 <div class="h2-id">
-                    <h1 class="font-poppins">Marilyn Dela Cruz<svg class="h2-check" viewBox="0 0 24 24" role="img" aria-label="Verified"><circle cx="12" cy="12" r="10.5" fill="currentColor"/><path d="M7.6 12.3l3 3 5.8-6" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></h1>
+                    <h1 class="font-poppins">Lyn Dela Cruz<svg class="h2-check" viewBox="0 0 24 24" role="img" aria-label="Verified"><circle cx="12" cy="12" r="10.5" fill="currentColor"/><path d="M7.6 12.3l3 3 5.8-6" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></h1>
                     <div class="h2-social">
                         <button type="button" onclick="openModal('phone')" aria-label="Phone" title="Phone"><i class="fas fa-phone"></i></button>
                         <button type="button" onclick="openModal('email')" aria-label="Email" title="Email"><i class="fas fa-envelope"></i></button>
