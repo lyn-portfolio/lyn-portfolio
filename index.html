@@ -1642,13 +1642,87 @@ html.intro-on #chatFab, html.intro-on #chatNudge { opacity:0; pointer-events:non
             typing.remove();
             let r; try { r = (TOPICS[topic] || TOPICS.fallback)(q); } catch (e) { r = TOPICS.fallback(); }
             bubble('bot', r.html + (r.acts && r.acts.length ? actsHtml(r.acts) : ''));
+            pushHist('assistant', plain(r.html));
         }, wait);
     }
     const LABELS = { about: 'About Lyn', experience: 'Experience', skills: 'Skills', tools: 'Tools', resume: 'Resume', contact: 'Contact', availability: 'Availability', leadership: 'Recommendations' };
+    // ===== REAL AI MODE =====
+    // Paste your Cloudflare Worker URL below (see chat-worker.js). Leave it empty and the chat keeps using the built-in quick answers.
+    const AI_ENDPOINT = 'https://lyn-chat.famadorchristian.workers.dev';
+    const AI_ON = /^https:\/\//.test(AI_ENDPOINT);
+    const hist = []; let busy = false;
+    const plain = html => { const d = document.createElement('div'); d.innerHTML = html; return (d.textContent || '').replace(/\s+/g, ' ').trim(); };
+    function pushHist(role, content) { if (!content) return; hist.push({ role, content: content.slice(0, 600) }); if (hist.length > 16) hist.splice(0, hist.length - 16); }
+    function cleanHist() {
+        const out = [];
+        hist.forEach(m => { const last = out[out.length - 1]; if (last && last.role === m.role) last.content += '\n' + m.content; else out.push({ role: m.role, content: m.content }); });
+        while (out.length && out[0].role !== 'user') out.shift();
+        while (out.length && out[out.length - 1].role !== 'user') out.pop();
+        return out;
+    }
+    // the AI reads this page's own text, so it always matches whatever you edit above
+    function buildContext() {
+        return ['home', 'about', 'skills', 'experience', 'tools', 'recommendations', 'contact']
+            .map(id => { const el = document.getElementById(id); return el ? '## ' + id.toUpperCase() + '\n' + txt(el) : ''; })
+            .filter(Boolean).join('\n\n').slice(0, 9000);
+    }
+    const inl = t => esc(t).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+    function toHtml(t) {
+        return t.trim().split(/\n{2,}/).map(par => {
+            const lines = par.split('\n');
+            if (lines.every(l => /^\s*[-•*]\s+/.test(l))) return '<ul>' + lines.map(l => '<li>' + inl(l.replace(/^\s*[-•*]\s+/, '')) + '</li>').join('') + '</ul>';
+            return '<p>' + lines.map(inl).join('<br>') + '</p>';
+        }).join('');
+    }
+    const ACT_MAP = {
+        resume: { label: 'Get the resume', act: 'resume', solid: true, icon: 'fa-download' },
+        contact: { label: 'Open contact form', href: '#contact', icon: 'fa-paper-plane' },
+        experience: { label: 'See experience', href: '#experience', icon: 'fa-arrow-right' },
+        skills: { label: 'See skills', href: '#skills', icon: 'fa-arrow-right' },
+        tools: { label: 'See tools', href: '#tools', icon: 'fa-arrow-right' },
+        about: { label: 'About Lyn', href: '#about', icon: 'fa-arrow-right' },
+        recommendations: { label: 'Read recommendations', href: '#recommendations', icon: 'fa-quote-left' }
+    };
+    function parseActs(t) {
+        const acts = [], seen = {};
+        const text = t.replace(/\[\[\s*(\w+)\s*\]\]/g, (m, k) => { k = k.toLowerCase(); if (ACT_MAP[k] && !seen[k] && acts.length < 2) { seen[k] = 1; acts.push(ACT_MAP[k]); } return ''; }).trim();
+        return { text, acts };
+    }
+    async function askAI(text) {
+        busy = true;
+        const typing = document.createElement('div'); typing.className = 'chat-typing'; typing.innerHTML = '<i></i><i></i><i></i>'; body.appendChild(typing); scrollDown();
+        const t0 = Date.now(), ctrl = new AbortController(), to = setTimeout(() => ctrl.abort(), 20000);
+        try {
+            const res = await fetch(AI_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, signal: ctrl.signal,
+                body: JSON.stringify({ messages: cleanHist(), context: buildContext() }) });
+            clearTimeout(to);
+            if (!res.ok) throw new Error('http ' + res.status);
+            const data = await res.json();
+            if (!data || !data.reply) throw new Error('empty');
+            const parsed = parseActs(String(data.reply));
+            if (!parsed.text) throw new Error('empty');
+            setTimeout(() => {
+                typing.remove(); busy = false;
+                pushHist('assistant', parsed.text);
+                bubble('bot', toHtml(parsed.text) + (parsed.acts.length ? actsHtml(parsed.acts) : ''));
+            }, reduce ? 0 : Math.max(0, 450 - (Date.now() - t0)));
+        } catch (e) {
+            clearTimeout(to); typing.remove(); busy = false;
+            reply(route(text), text);   // AI unreachable: fall back to the built-in answers
+        }
+    }
     function send(text, topic) {
-        text = (text || '').trim(); if (!text) return;
+        text = (text || '').trim(); if (!text || busy) return;
         bubble('me', esc(text));
-        reply(topic || route(text), text);
+        pushHist('user', text);
+        if (topic || !AI_ON) return reply(topic || route(text), text);
+        askAI(text);
+    }
+    if (AI_ON) {
+        TOPICS.greet = () => ({ html: '<p>Hi there! 👋 I’m Lyn’s AI assistant.</p><p>Ask me anything about her work, skills, or availability. You can type naturally, in English or Taglish.</p>' });
+        const sm = $('.chat-who small'); if (sm) sm.textContent = 'AI assistant · replies instantly';
+        input.placeholder = 'Ask me anything…'; input.maxLength = 500;
+        const nt = $('.chat-note'); if (nt) nt.textContent = 'AI assistant. Answers come from this portfolio and may not always be accurate.';
     }
 
     let started = false;
