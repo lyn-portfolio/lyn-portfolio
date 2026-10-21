@@ -762,8 +762,8 @@
                 <h2 class="c-title">Contact Details</h2>
                 <p class="c-sub">Prefer to talk directly? Reach me here.</p>
                 <div class="c-list">
-                    <a class="c-row" href="tel:+639760795952"><i class="fas fa-phone"></i><span><b>+63 976 079 5952</b><small>Available for calls, SMS, and WhatsApp.</small></span></a>
-                    <a class="c-row" href="mailto:amberigudgurl@gmail.com"><i class="fas fa-envelope"></i><span><b>amberigudgurl@gmail.com</b><small>Send job offers or inquiries directly.</small></span></a>
+                    <a class="c-row" href="tel:+639760795952" data-contact="phone"><i class="fas fa-phone"></i><span><b>+63 976 079 5952</b><small>Available for calls, SMS, and WhatsApp.</small></span></a>
+                    <a class="c-row" href="mailto:amberigudgurl@gmail.com" data-contact="email"><i class="fas fa-envelope"></i><span><b>amberigudgurl@gmail.com</b><small>Send job offers or inquiries directly.</small></span></a>
                     <div class="c-row"><i class="fas fa-location-dot"></i><span><b>Philippines</b><small>Open for Remote, Hybrid, or On-site roles.</small></span></div>
                 </div>
             </div>
@@ -1006,6 +1006,7 @@
                     <p class="text-sm text-textmuted">Available for calls, SMS, and WhatsApp.</p>
                     <div class="flex flex-wrap gap-3 justify-center pt-4">
                         <button onclick="callNow()" class="bg-accent text-white font-bold px-6 py-2.5 rounded-full hover:bg-[#9a4c2e] transition text-sm shadow-md hover:-translate-y-0.5 inline-block">Call Now</button>
+                        <a href="https://wa.me/639760795952" target="_blank" rel="noopener noreferrer" class="border border-cardborder text-textmain font-semibold px-6 py-2.5 rounded-full hover:border-accent hover:text-accent transition text-sm inline-block">WhatsApp</a>
                     </div>
                     <p id="modalNote" class="text-sm text-accent font-semibold min-h-[1.25rem]"></p>
                 `;
@@ -1039,8 +1040,22 @@
             }, 10);
         }
 
+        // phones & tablets can call / open a mail app directly; desktop browsers get a popup instead
+        function isPhoneOrTablet() {
+            return /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) ||
+                   !!(navigator.userAgentData && navigator.userAgentData.mobile) ||
+                   (/Macintosh/.test(navigator.userAgent) && navigator.maxTouchPoints > 1);
+        }
+        document.querySelectorAll('[data-contact]').forEach(function (a) {
+            a.addEventListener('click', function (e) {
+                if (isPhoneOrTablet()) return;   // smartphone: let tel: / mailto: do their job
+                e.preventDefault();
+                openModal(a.dataset.contact);
+            });
+        });
+
         function callNow() {
-            const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || (navigator.userAgentData && navigator.userAgentData.mobile);
+            const isMobile = isPhoneOrTablet();
             const note = document.getElementById('modalNote');
             if (isMobile) {
                 window.location.href = 'tel:+639760795952';
