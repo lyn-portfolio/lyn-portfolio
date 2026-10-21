@@ -242,7 +242,7 @@
         :root { --ink:#1e293b; --on-ink:#f4f1e8; --panel:rgba(255,255,255,.72); --line:rgba(229,231,235,.95); --nav-bg:rgba(255,255,255,.82); --nav-bg2:rgba(255,255,255,.95); }
         html[data-theme="dark"] { color-scheme:dark; --ink:#f4f1e8; --on-ink:#1e293b; --panel:rgba(30,41,59,.72); --line:rgba(148,163,184,.25); --nav-bg:rgba(20,28,43,.82); --nav-bg2:rgba(20,28,43,.95); }
 
-        /* ===== navbar: rounded bar with logo badge, uppercase links, theme toggle + Hire Me ===== */
+        /* ===== navbar: rounded bar with logo badge, uppercase links, theme toggle + Contact ===== */
         header.site-nav { top:.9rem; left:50%; translate:-50% 0; width:min(1180px, calc(100% - 1.5rem)); padding:.65rem 1rem;
             border:1px solid var(--line); border-radius:1rem; background:var(--nav-bg); }
         header.site-nav.scrolled { padding:.5rem 1rem; background:var(--nav-bg2); }
@@ -776,7 +776,7 @@ html[data-theme="dark"] .tm-btn:hover,html[data-theme="dark"] .tm-btn[aria-expan
             <!-- Mobile menu button -->
             <div class="nav-right">
                 <button id="themeBtn" type="button" class="theme-btn" aria-label="Switch to dark mode" title="Switch theme"><svg class="ico-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="ico-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
-                <a href="#contact" class="hire-btn">Hire Me</a>
+                <a href="#contact" class="hire-btn">Contact</a>
                 <button id="menuBtn" type="button" aria-label="Open menu" aria-expanded="false" class="site-burger text-textmain text-2xl w-10 h-10 flex items-center justify-center rounded-lg hover:text-accent transition">
                 <i class="fas fa-bars"></i>
             </button>
@@ -791,7 +791,7 @@ html[data-theme="dark"] .tm-btn:hover,html[data-theme="dark"] .tm-btn[aria-expan
             <a href="#experience" data-nav="experience" class="block px-2 py-2.5 rounded-lg hover:text-accent transition">Experience</a>
             <a href="#tools" data-nav="tools" class="block px-2 py-2.5 rounded-lg hover:text-accent transition">Tools</a>
             <a href="#recommendations" data-nav="recommendations" class="block px-2 py-2.5 rounded-lg hover:text-accent transition">Leadership</a>
-            <a href="#contact" data-nav="contact" class="block px-2 py-2.5 rounded-lg hover:text-accent transition">Hire Me</a>
+            <a href="#contact" data-nav="contact" class="block px-2 py-2.5 rounded-lg hover:text-accent transition">Contact</a>
         </nav>
     </header>
 
@@ -1956,5 +1956,112 @@ document.addEventListener('pointermove', function (e) {
     c.style.setProperty('--my', (e.clientY - r.top) + 'px');
 }, { passive: true });
 </script>
+<!-- ===== EXTRA MOTION: sparkle trail, click burst, magnetic buttons, blob parallax ===== -->
+<style id="fx-css">
+.fx-s{position:fixed;left:0;top:0;z-index:9990;pointer-events:none;line-height:1;color:var(--accent);will-change:transform,opacity;
+  animation:fxFloat var(--d,900ms) cubic-bezier(.2,.7,.3,1) forwards}
+@keyframes fxFloat{0%{opacity:.9;transform:translate(var(--x),var(--y)) scale(.4) rotate(0)}
+  100%{opacity:0;transform:translate(calc(var(--x) + var(--dx)),calc(var(--y) + var(--dy))) scale(1.1) rotate(var(--r))}}
+.fx-ring{position:fixed;left:0;top:0;width:34px;height:34px;margin:-17px 0 0 -17px;border:1.5px solid var(--accent);border-radius:50%;
+  z-index:9989;pointer-events:none;opacity:0;transition:opacity .3s,width .25s,height .25s,margin .25s,background .25s}
+.fx-ring.on{opacity:.55}
+.fx-ring.big{width:56px;height:56px;margin:-28px 0 0 -28px;background:rgba(184,92,56,.08);opacity:.8}
+.btn-primary,.btn-secondary,.hire-btn,.back-home{translate:var(--mgx,0) var(--mgy,0);transition-property:transform,box-shadow,background,color,border-color,translate}
+.animate-blob{translate:var(--px,0) var(--py,0);transition:translate .9s cubic-bezier(.2,.7,.2,1)}
+
+/* hero: living gradient ring around the photo, floating chips, ambient glow */
+@property --ang{syntax:"<angle>";inherits:false;initial-value:0deg}
+.h2-photo{border:4px solid transparent !important;
+  background:linear-gradient(var(--panel),var(--panel)) padding-box,conic-gradient(from var(--ang),#b85c38,#fcd4c7,#d98d6c,#e8e2d2,#b85c38) border-box !important;
+  animation:fxSpin 6s linear infinite;box-shadow:0 0 0 6px rgba(184,92,56,.10),0 14px 40px -12px rgba(184,92,56,.55)}
+@keyframes fxSpin{to{--ang:360deg}}
+.h2-photo img{border-radius:50%}
+.h2-chip{animation:fxBob 4.2s ease-in-out infinite}
+.h2-chip:nth-of-type(2n){animation-delay:-1.4s}.h2-chip:nth-of-type(3n){animation-delay:-2.6s}
+@keyframes fxBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+.h2-id h1{background:linear-gradient(100deg,currentColor 40%,var(--accent) 50%,currentColor 60%) 0 0/250% 100%;
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:fxShine 5s ease-in-out infinite}
+.h2-check{-webkit-text-fill-color:initial}
+@keyframes fxShine{0%,55%{background-position:120% 0}100%{background-position:-20% 0}}
+.fx-glow{position:fixed;left:0;top:0;width:520px;height:520px;margin:-260px 0 0 -260px;border-radius:50%;z-index:-1;pointer-events:none;
+  background:radial-gradient(circle,rgba(217,141,108,.22),transparent 65%);opacity:0;transition:opacity .5s}
+.fx-glow.on{opacity:1}
+
+
+</style>
+<script>
+(function(){
+  try{
+    var d=document.documentElement;
+    
+    var glyphs=['✦','✧','✦','·'],last=0,mx=-99,my=-99,rx=-99,ry=-99;
+    addEventListener('touchmove',function(e){var t=e.touches[0];if(t&&performance.now()-last>60){last=performance.now();spark(t.clientX,t.clientY,40,10+Math.random()*8)}},{passive:true});
+
+    function spark(x,y,spread,size){
+      var s=document.createElement('i');s.className='fx-s';s.textContent=glyphs[Math.random()*glyphs.length|0];
+      s.style.cssText='--x:'+(x-6)+'px;--y:'+(y-6)+'px;--dx:'+((Math.random()-.5)*spread)+'px;--dy:'+(Math.random()*spread*.8+10)+'px;--r:'+((Math.random()-.5)*160)+'deg;--d:'+(700+Math.random()*500)+'ms;font-size:'+size+'px;color:'+(Math.random()<.45?'var(--accent2)':'var(--accent)');
+      document.body.appendChild(s);setTimeout(function(){s.remove()},1300);
+    }
+    addEventListener('mousemove',function(e){
+      mx=e.clientX;my=e.clientY;
+      var n=performance.now();if(n-last>55&&!d.classList.contains('intro-on')){last=n;spark(mx,my,46,9+Math.random()*8)}
+      // blobs drift gently against the cursor
+      var px=(e.clientX/innerWidth-.5),py=(e.clientY/innerHeight-.5);
+      document.querySelectorAll('.animate-blob').forEach(function(b,i){var k=(i+1)*14;b.style.setProperty('--px',(-px*k)+'px');b.style.setProperty('--py',(-py*k)+'px')});
+    },{passive:true});
+        (function loop(){requestAnimationFrame(loop)})();
+
+    // click burst
+    addEventListener('click',function(e){for(var i=0;i<9;i++)spark(e.clientX,e.clientY,120,10+Math.random()*10)});
+
+    // magnetic buttons
+    var mags='.btn-primary,.btn-secondary,.hire-btn,.back-home';
+    document.addEventListener('mousemove',function(e){
+      document.querySelectorAll(mags).forEach(function(b){
+        var r=b.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2,dx=e.clientX-cx,dy=e.clientY-cy;
+        if(Math.abs(dx)<r.width/2+40&&Math.abs(dy)<r.height/2+40){b.style.setProperty('--mgx',(dx*.18)+'px');b.style.setProperty('--mgy',(dy*.28)+'px')}
+        else{b.style.removeProperty('--mgx');b.style.removeProperty('--mgy')}
+      });
+    },{passive:true});
+  }catch(err){}
+})();
+</script>
+
+<!-- ===== EXTRA MOTION 2: drifting sparkles, drawn title underlines, button shine ===== -->
+<style id="fx2-css">
+.fx-drift{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.fx-drift i{position:absolute;bottom:-8%;font-style:normal;line-height:1;color:var(--accent2);opacity:0;
+  animation:fxRise var(--t,18s) linear var(--w,0s) infinite}
+@keyframes fxRise{0%{opacity:0;transform:translate(0,0) rotate(0) scale(.6)}12%{opacity:.5}
+  50%{transform:translate(var(--sx,20px),-55vh) rotate(120deg) scale(1)}88%{opacity:.35}
+  100%{opacity:0;transform:translate(calc(var(--sx,20px) * -1),-112vh) rotate(260deg) scale(.7)}}
+h2.text-3xl .text-accent{background:linear-gradient(100deg,var(--accent) 35%,#f0b79d 50%,var(--accent) 65%) 0 0/250% 100%;
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:fxShine 6s ease-in-out infinite}
+.btn-primary:hover,.btn-secondary:hover,.hire-btn:hover{background-image:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.3) 50%,transparent 70%);
+  background-size:250% 100%;animation:fxSweep .9s ease}
+@keyframes fxSweep{from{background-position:150% 0}to{background-position:-50% 0}}
+.soft-shadow{animation:fxEdge 7s ease-in-out infinite}
+@keyframes fxEdge{0%,100%{box-shadow:0 0 0 0 rgba(184,92,56,0)}50%{box-shadow:0 10px 30px -14px rgba(184,92,56,.28)}}
+</style>
+<script>
+(function(){
+  try{
+    var box=document.createElement('div');box.className='fx-drift';box.setAttribute('aria-hidden','true');
+    var g=['✦','✧','✦','·','✦'];
+    for(var i=0;i<16;i++){
+      var s=document.createElement('i');s.textContent=g[i%g.length];
+      s.style.cssText='left:'+(Math.random()*96)+'%;font-size:'+(10+Math.random()*16)+'px;--t:'+(16+Math.random()*16)+'s;--w:-'+(Math.random()*24)+'s;--sx:'+((Math.random()-.5)*90)+'px';
+      box.appendChild(s);
+    }
+    document.body.appendChild(box);
+    var hs=document.querySelectorAll('h2.text-3xl');
+    if('IntersectionObserver' in window){
+      var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('fx-in');io.unobserve(e.target)}})},{threshold:.6});
+      hs.forEach(function(h){io.observe(h)});
+    }else hs.forEach(function(h){h.classList.add('fx-in')});
+  }catch(err){}
+})();
+</script>
+
 </body>
 </html>
