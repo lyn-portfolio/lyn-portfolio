@@ -2760,7 +2760,19 @@ html[data-theme="dark"]{--pc-face:#1a2540;--pc-edge:rgba(244,241,232,.26);--pc-i
 .sk-js .st-arches:not(.in) .st-arch{opacity:0}
 .st-arches.in .st-arch{animation:stIn .9s cubic-bezier(.2,1,.3,1) calc(var(--d,0) * .14s) backwards}
 @keyframes stIn{from{opacity:0;transform:translateY(46px)}to{opacity:1;transform:none}}
-@media(max-width:639px){.st-arch{min-height:0;padding:2.6rem 1.4rem 1.4rem;border-radius:9rem 9rem 1.2rem 1.2rem}}
+/* phones: compact side-by-side cards; the arch shape lives on in the small icon badge */
+@media(max-width:639px){
+  .st-arches{gap:.8rem}
+  .st-arch{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:1rem;align-items:start;text-align:left;min-height:0;
+    padding:1.2rem 1.1rem 1.25rem 1rem;border-radius:1.2rem;outline-offset:-.4rem}
+  .st-arch::after{display:none}
+  .st-arch:hover{transform:translateY(-3px)}
+  .st-ico{grid-row:1/3;width:3.1rem;height:3.9rem;margin:0;border-radius:999px 999px .7rem .7rem;font-size:1.05rem}
+  .st-arch h3{grid-column:2;margin:.15rem 0 .35rem;padding-right:2.2rem;font-size:1.5rem}
+  .st-arch p{grid-column:2;font-size:.86rem;line-height:1.55}
+  .st-roman{position:absolute;top:1rem;right:1.1rem;margin:0;padding:0;font-size:.85rem;letter-spacing:.1em}
+  .st-roman::before,.st-roman::after{display:none}
+}
 
 @media(prefers-reduced-motion:reduce){
   .ex-list.in .ex-row,.st-arches.in .st-arch{animation:none}
