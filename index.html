@@ -710,7 +710,7 @@ html[data-theme="dark"] .tm-btn:hover,html[data-theme="dark"] .tm-btn[aria-expan
 
     var fill = document.getElementById('introFill'), pctEl = document.getElementById('introPct'), skip = document.getElementById('introSkip');
     var greets = el.querySelectorAll('.g');
-    var t0 = performance.now(), seqStart = null, p = 0, lastPct = -1, done = false, ready = document.readyState === 'complete';
+    var t0 = performance.now(), seqStart = null, base = 0, p = 0, lastPct = -1, done = false, ready = document.readyState === 'complete';
     var TARGET = reduced ? 3200 : 4300;               // <<< INTRO LENGTH: ms from page open until the curtain starts to open
     var SEQ = 3000;                                    // (worked out in begin() from TARGET)
     window.addEventListener('load', function () { ready = true; });
@@ -722,7 +722,7 @@ html[data-theme="dark"] .tm-btn:hover,html[data-theme="dark"] .tm-btn[aria-expan
         if (seqStart === null) target = Math.min(.22, (now - t0) / 9000);            // slow creep while fonts load
         else {
             var k = Math.min(1, (now - seqStart) / SEQ);
-            target = .22 + (ease(k) * .78);
+            target = base + (ease(k) * (1 - base));                                     // carry on from wherever the creep got to, so it never jumps
             if (!ready && target > .96) target = .96;                                  // wait for the page, never lie at 100%
         }
         if (done) target = 1;
@@ -747,8 +747,8 @@ html[data-theme="dark"] .tm-btn:hover,html[data-theme="dark"] .tm-btn[aria-expan
 
     function begin() {
         if (done) return;
-        seqStart = performance.now();
-        SEQ = Math.max(TARGET - (seqStart - t0), reduced ? 2400 : 3700) - 300;   // fonts loading late never shortens the welcome
+        seqStart = performance.now(); base = p;
+        SEQ =Math.max(TARGET - (seqStart - t0), reduced ? 2400 : 3700) - 300;   // fonts loading late never shortens the welcome
         el.classList.add('is-live');
         if (reduced) {                                                    // calm version: straight to the welcome text
             el.classList.add('p-welcome');
