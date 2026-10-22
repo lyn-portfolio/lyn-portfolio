@@ -2115,6 +2115,9 @@ html[data-theme="dark"] .tm-btn:hover,html[data-theme="dark"] .tm-btn[aria-expan
 @media(max-width:767px){
   #toolsAll.tt-on .tm-all-inner{display:grid;grid-template-columns:3.3rem minmax(0,1fr);column-gap:.9rem;align-items:start}
   .tt-bar{gap:.3rem;padding:.35rem;border-radius:1.1rem}
+  /* the rail rides along while the tools scroll by, so it ends level with the last tool instead of leaving a gap */
+  .tt-bar{position:sticky;top:calc(7.5rem + env(safe-area-inset-top,0px))}
+  @supports (overflow:clip){#tools.overflow-hidden,#toolsAll .tm-all-inner{overflow:clip}}
   .tt-bar::before{display:none}
   .tt-tab{justify-content:center;gap:0;padding:.3rem;border-radius:.75rem}
   .tt-tab>span{display:none}
