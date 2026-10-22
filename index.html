@@ -2357,18 +2357,27 @@ html[data-theme="dark"] #recDeck.deck-on>.pc::before{background:linear-gradient(
   #recWrap>#recDeck{grid-column:2;grid-row:2}
   #recWrap>#recDeckUi{grid-column:2;grid-row:3}
 }
+#recDeck.deck-on>.pc.swap-out{z-index:6;transition:transform .3s cubic-bezier(.3,.7,.4,1),box-shadow .3s ease!important}
+/* no blur: drop the glass backdrop-filter on the cards and the scroll-in de-blur in this section */
+#recDeck.deck-on>.pc{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+#recommendations .reveal{filter:none!important}
 @media (min-width:768px){
   #recDeck.deck-on{padding-bottom:3.4rem}
   #recDeck.deck-on>.pc{width:min(100% - 3rem,27rem);min-height:24rem;padding:4rem 2.4rem 3.6rem!important}
   #recDeck.deck-on>.pc>h3{font-size:1.7rem;margin-bottom:1.1rem}
   #recDeck.deck-on>.pc>p{font-size:1rem;line-height:1.7}
-  #recDeck.deck-on>.pc[data-pos="1"]{--x:14px;--y:14px}
-  #recDeck.deck-on>.pc[data-pos="2"]{--x:-14px;--y:28px}
+  #recDeck.deck-on>.pc{transition:transform .95s cubic-bezier(.22,1.1,.36,1),opacity .3s ease,box-shadow .4s ease!important}
+  #recDeck.deck-on>.pc.no-t{transition:none!important}
+  #recDeck.deck-on>.pc{transform-origin:50% 100%}
+  #recDeck.deck-on>.pc[data-pos="0"]{--x:0px;--y:0px;--r:0deg;--s:1}
+  #recDeck.deck-on>.pc[data-pos="1"]{--x:0px;--y:0px;--r:-5deg;--s:1}
+  #recDeck.deck-on>.pc[data-pos="2"]{--x:0px;--y:0px;--r:-10deg;--s:1}
 }
 @media (prefers-reduced-motion:reduce){
-  #recDeck.deck-on>.pc,#recDeck.deck-on.dealing>.pc,#recDeck.deck-on>.pc.flying{transition-duration:.01ms!important;transition-delay:0ms!important}
+  #recDeck.deck-on>.pc,#recDeck.deck-on.dealing>.pc{transition:transform .45s ease,opacity .4s ease,box-shadow .3s ease!important;transition-delay:0ms!important}
+  #recDeck.deck-on>.pc.flying{transition:transform .45s ease,opacity .4s ease!important}
+  #recDeck.deck-on>.pc.no-t{transition:none!important}
   #recDeck.deck-on.dealt:not(.dealing)>.pc[data-pos="0"]::before{animation:none}
-  .deck-dot::before{transition:none}
 }
 </style>
 
@@ -2383,8 +2392,7 @@ html[data-theme="dark"] #recDeck.deck-on>.pc::before{background:linear-gradient(
     var listBtns = Array.prototype.slice.call(document.querySelectorAll('#recList button'));
     var live = document.getElementById('recDeckLive');
     var mq = window.matchMedia('all'), rm = window.matchMedia('(prefers-reduced-motion: reduce)');
-    var FLY = 420, ENTER = 600;
-    var top = 0, busy = false, on = false, io = null, drag = null, hinted = false, timers = [], dealTimer = null;
+        var top = 0, busy = false, on = false, io = null, drag = null, hinted = false, timers = [], dealTimer = null;
 
     function later(fn, ms) { var t = setTimeout(fn, ms); timers.push(t); return t; }
     function interactive() { return on && deck.classList.contains('dealt') && !deck.classList.contains('dealing'); }
@@ -2406,8 +2414,39 @@ html[data-theme="dark"] #recDeck.deck-on>.pc::before{background:linear-gradient(
     }
     function touched() { ui.classList.add('used'); }
 
-    // top card flies off to one side and slips to the back of the deck
+    // a hand of cards: the card is pulled out, swung round and tucked in at the back while the rest fan forward
+    var fan = window.matchMedia('(min-width: 768px)');
+    function pull(c, sign) {
+        if (rm.matches) return { dx: sign * 48, dr: 0, y: -12 };   // reduced-motion devices still see the card being pulled out, just a small, calm move
+        return fan.matches ? { dx: sign * 40, dr: sign * 16, y: -26 } : { dx: sign * c.offsetWidth * 0.62, dr: sign * 6, y: 0 };
+    }
+    function swapOut(c, sign, mid, done) {
+        busy = true;
+        var m = pull(c, sign);
+        if (m) {
+            c.classList.add('swap-out');
+            c.style.setProperty('--dx', m.dx + 'px'); c.style.setProperty('--dr', m.dr + 'deg');
+            if (m.y) c.style.setProperty('--y', m.y + 'px');
+        }
+        later(function () {
+            mid();                                      // new order: every card glides to its new place in the fan
+            ['--dx', '--dr', '--y'].forEach(function (k) { c.style.removeProperty(k); });
+            c.classList.remove('swap-out');
+            later(function () { busy = false; if (done) done(); }, 600);
+        }, m ? 300 : 0);
+    }
     function moveNext(sign, cb) {
+        var c = cards[top];
+        c.classList.remove('dragging');
+        swapOut(c, sign, function () { top = (top + 1) % N; render(); }, cb);
+    }
+    // the card at the back is pulled out from behind and takes the front spot
+    function movePrev(cb) {
+        var idx = (top - 1 + N) % N, c = cards[idx];
+        swapOut(c, -1, function () { top = idx; render(); }, cb);
+    }
+    // dragging: the card keeps flying off the side you flung it to, then slips to the back of the deck
+    function flyAway(sign, cb) {
         var c = cards[top], W = Math.max(window.innerWidth, 320);
         busy = true;
         c.classList.remove('dragging');
@@ -2422,19 +2461,7 @@ html[data-theme="dark"] #recDeck.deck-on>.pc::before{background:linear-gradient(
             void c.offsetWidth;
             c.classList.remove('no-t');
             busy = false; if (cb) cb();
-        }, rm.matches ? 0 : FLY);
-    }
-    // the card at the back comes back over the top from the left
-    function movePrev(cb) {
-        var idx = (top - 1 + N) % N, c = cards[idx], W = Math.max(window.innerWidth, 320);
-        busy = true;
-        c.classList.add('no-t', 'flying', 'entering');
-        c.style.setProperty('--dx', (-W * 1.1) + 'px'); c.style.setProperty('--dr', '-26deg');
-        void c.offsetWidth;
-        c.classList.remove('no-t', 'flying');
-        c.style.removeProperty('--dx'); c.style.removeProperty('--dr');
-        top = idx; render();
-        later(function () { c.classList.remove('entering'); busy = false; if (cb) cb(); }, rm.matches ? 0 : ENTER);
+        }, rm.matches ? 450 : 420);
     }
     function step(dir) {
         if (busy || !interactive()) return;
@@ -2482,7 +2509,7 @@ html[data-theme="dark"] #recDeck.deck-on>.pc::before{background:linear-gradient(
         if (d.lock !== 'x') return;
         d.c.classList.remove('dragging');
         var thr = Math.min(90, d.c.offsetWidth * 0.28);
-        if (!cancelled && (Math.abs(d.dx) > thr || (Math.abs(d.v) > 0.6 && Math.abs(d.dx) > 24))) moveNext(d.dx < 0 ? -1 : 1, announce);
+        if (!cancelled && (Math.abs(d.dx) > thr || (Math.abs(d.v) > 0.6 && Math.abs(d.dx) > 24))) flyAway(d.dx < 0 ? -1 : 1, announce);
         else { d.c.style.removeProperty('--dx'); d.c.style.removeProperty('--dr'); }   // springs back
     }
     deck.addEventListener('pointerdown', onDown);
