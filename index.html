@@ -2240,5 +2240,10 @@ html[data-theme="dark"] .fx-drift i{color:#f6e3d4;text-shadow:0 0 5px rgba(255,2
 .bg-star{display:none !important}
 @media (prefers-reduced-motion:reduce){.fx-drift i{animation:none;opacity:.35}}
 </style>
+<style id="hero-btn-css">
+/* hero buttons (Explore Work / Download CV): same hover effect as the Contact and Send Message buttons */
+.btn-primary,.btn-secondary{translate:none !important;transition:background .25s,color .25s,border-color .25s,box-shadow .25s}
+.btn-primary:hover,.btn-secondary:hover{transform:none !important;animation:none !important;background-image:none !important;background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 10px 22px -12px rgba(184,92,56,.65)}
+</style>
 </body>
 </html>
