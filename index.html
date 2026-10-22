@@ -961,36 +961,58 @@ html[data-theme="dark"] .tm-btn:hover,html[data-theme="dark"] .tm-btn[aria-expan
                 <h2 class="text-3xl sm:text-4xl font-poppins font-bold text-textmain">Work <span class="text-accent">Experience</span></h2>
                 <p class="jt-sub">The roles that shaped how I lead, support, and improve teams.</p>
             </div>
-            <div class="jt-list" id="jtList">
-                <div class="jt-line" aria-hidden="true"><i class="jt-fill"></i></div>
+            <div class="cr-wrap" id="crWrap">
+                <!-- career at a glance: one segment per role/account, sized by how long it lasted -->
+                <div class="cb reveal">
+                    <div class="cb-head"><span>Career at a glance</span><small class="cb-hint">Tap a segment to jump to it</small></div>
+                    <div class="cb-bar" id="cbBar" role="group" aria-label="Career timeline, April 2015 to present">
+                        <button type="button" class="cb-seg" data-k="nanox" data-from="2015-04" data-to="2018-01" style="--c:#94a3b8;--g:33" aria-label="Nanox Philippines, Apr 2015 – Jan 2018"></button>
+                        <button type="button" class="cb-seg" data-k="turbo" data-from="2018-01" data-to="2020-02" style="--c:#ecc0a8;--g:25" aria-label="Turbo Campaign, Jan 2018 – Feb 2020"></button>
+                        <button type="button" class="cb-seg" data-k="seatgeek" data-from="2020-02" data-to="2021-02" style="--c:#e0a07f;--g:12" aria-label="SeatGeek and DoorDash Cx Support, Feb 2020 – Feb 2021"></button>
+                        <button type="button" class="cb-seg" data-k="drive" data-from="2021-02" data-to="2022-06" style="--c:#cf7a54;--g:16" aria-label="DoorDash Drive Dx Support, Feb 2021 – Jun 2022"></button>
+                        <button type="button" class="cb-seg" data-k="vip" data-from="2022-06" data-to="2023-02" style="--c:#b85c38;--g:8" aria-label="DoorDash VIP Dx Premium Support, Jun 2022 – Jan 2023"></button>
+                        <button type="button" class="cb-seg now" data-k="mcd" data-from="2023-02" data-to="now" style="--c:#8e4126;--g:44" aria-label="DoorDash SaaS – McDonald's, Feb 2023 – Present"></button>
+                    </div>
+                    <div class="cb-ticks" id="cbTicks" aria-hidden="true"></div>
+                </div>
 
-                <article class="jt-item">
-                    <span class="jt-node" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="3" y="14" width="4" height="6" rx="1.5"/><rect x="17" y="14" width="4" height="6" rx="1.5"/><path d="M19 20c0 1.5-2 2-5 2"/></svg></span>
-                    <div class="jt-card soft-shadow">
-                        <span class="jt-date">Jan 2018 – Present</span>
+                <article class="cr">
+                    <div class="cr-side">
+                        <span class="cr-big" aria-hidden="true"><b>2018</b><i>to</i><b>Now</b></span>
+                        <span class="cr-when">Jan 2018 – Present</span>
+                        <span class="cr-yrs">8+ years</span>
+                    </div>
+                    <div class="cr-body">
                         <h3 class="text-2xl font-poppins font-bold text-textmain">Customer Support Teammate – SME &amp; Team POC</h3>
                         <p class="text-accent font-medium mt-1">TaskUs · Philippines</p>
-                        <ul class="jt-ul list-disc list-inside space-y-3 text-textmuted leading-relaxed">
-                        <li><strong class="text-textmain">DoorDash SaaS – McDonald's (Feb 2023 – Present):</strong> Assist customers with their McDonald's order concerns in a timely manner.</li>
-                        <li><strong class="text-textmain">DoorDash VIP Dx Premium Support, Pioneer LOB (Jun 2022 – Jan 2023):</strong> Handled chat contacts from VIP dashers about their orders and resolved concerns promptly.</li>
-                        <li><strong class="text-textmain">DoorDash Drive Dx Support (Feb 2021 – Jun 2022):</strong> Handled chat and inbound calls on dasher delivery concerns. As SME, supported nester waves through bootcamp by cascading KB process updates, auditing call cases, and guiding teammates.</li>
-                        <li><strong class="text-textmain">SeatGeek (Feb – Apr 2020) &amp; DoorDash Cx Support (Apr 2020 – Feb 2021):</strong> Handled web emails on event ticket concerns, then web emails, chats, and inbound calls on customer order concerns.</li>
-                        <li><strong class="text-textmain">Turbo Campaign – SME &amp; Team POC (Jan 2018 – Feb 2020):</strong> Ensured quality by double-checking tasks before submission; prepared EOD reports, tracked team attendance and productivity, and led huddles on client process updates.</li>
-                    </ul>
+                        <ul class="cr-acc">
+                            <li class="cr-card now" data-k="mcd" style="--c:#8e4126"><strong>DoorDash SaaS – McDonald's</strong><em>Feb 2023 – Present</em><span>Assist customers with their McDonald's order concerns in a timely manner.</span></li>
+                            <li class="cr-card" data-k="vip" style="--c:#b85c38"><strong>DoorDash VIP Dx Premium Support, Pioneer LOB</strong><em>Jun 2022 – Jan 2023</em><span>Handled chat contacts from VIP dashers about their orders and resolved concerns promptly.</span></li>
+                            <li class="cr-card" data-k="drive" style="--c:#cf7a54"><strong>DoorDash Drive Dx Support</strong><em>Feb 2021 – Jun 2022</em><span>Handled chat and inbound calls on dasher delivery concerns. As SME, supported nester waves through bootcamp by cascading KB process updates, auditing call cases, and guiding teammates.</span></li>
+                            <li class="cr-card" data-k="seatgeek" style="--c:#e0a07f"><strong>SeatGeek &amp; DoorDash Cx Support</strong><em>Feb 2020 – Feb 2021</em><span>Handled web emails on event ticket concerns (SeatGeek, Feb – Apr 2020), then web emails, chats, and inbound calls on customer order concerns (DoorDash, Apr 2020 – Feb 2021).</span></li>
+                            <li class="cr-card" data-k="turbo" style="--c:#ecc0a8"><strong>Turbo Campaign – SME &amp; Team POC</strong><em>Jan 2018 – Feb 2020</em><span>Ensured quality by double-checking tasks before submission; prepared EOD reports, tracked team attendance and productivity, and led huddles on client process updates.</span></li>
+                        </ul>
                     </div>
                 </article>
 
-                <article class="jt-item">
-                    <span class="jt-node" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21V11l6 4v-4l6 4V5h4v16z"/><path d="M8 21v-3M13 21v-3"/></svg></span>
-                    <div class="jt-card soft-shadow">
-                        <span class="jt-date">Apr 2015 – Jan 2018</span>
+                <article class="cr">
+                    <div class="cr-side">
+                        <span class="cr-big" aria-hidden="true"><b>2015</b><i>to</i><b>2018</b></span>
+                        <span class="cr-when">Apr 2015 – Jan 2018</span>
+                        <span class="cr-yrs">3 years</span>
+                    </div>
+                    <div class="cr-body">
                         <h3 class="text-2xl font-poppins font-bold text-textmain">Assistant Line Leader</h3>
                         <p class="text-accent font-medium mt-1">Nanox Philippines, Inc. · Philippines</p>
-                        <ul class="jt-ul list-disc list-inside space-y-3 text-textmuted leading-relaxed">
-                        <li><strong class="text-textmain">Team Meetings:</strong> Conducted team meetings with production operators and informed them of the daily production targets.</li>
-                        <li><strong class="text-textmain">Workflow Monitoring:</strong> Monitored workflow efficiency to ensure daily output targets were consistently met.</li>
-                        <li><strong class="text-textmain">Process Updates:</strong> Provided product updates on the work process to keep operators aligned.</li>
-                    </ul>
+                        <ul class="cr-acc cr-acc--one">
+                            <li class="cr-card" data-k="nanox" style="--c:#94a3b8">
+                                <ol class="cr-duties">
+                                    <li><strong>Team Meetings</strong><span>Conducted team meetings with production operators and informed them of the daily production targets.</span></li>
+                                    <li><strong>Workflow Monitoring</strong><span>Monitored workflow efficiency to ensure daily output targets were consistently met.</span></li>
+                                    <li><strong>Process Updates</strong><span>Provided product updates on the work process to keep operators aligned.</span></li>
+                                </ol>
+                            </li>
+                        </ul>
                     </div>
                 </article>
             </div>
@@ -1821,7 +1843,7 @@ html[data-theme="dark"] .tm-btn:hover,html[data-theme="dark"] .tm-btn[aria-expan
         intro: () => txt($('#home p')),
         name: () => txt($('#about h2 .text-accent')),
         about: () => txt($('#about .soft-shadow')),
-        jobs: () => $$('#experience .soft-shadow').map(c => ({ t: txt($('h3', c)), p: txt($('p.text-accent', c)), w: txt($('span', c)), pts: $$('li strong', c).map(e => txt(e).replace(/:$/, '')) })),
+        jobs: () => $$('#experience .cr').map(c => ({ t: txt($('h3', c)), p: txt($('p.text-accent', c)), w: txt($('.cr-when', c)), pts: $$('li strong', c).map(e => txt(e).replace(/:$/, '')) })),
         skills: () => $$('#skills .reveal').map(g => ({ h: txt($('h2', g)), items: $$('h3', g).map(txt) })).filter(g => g.items.length),
         tools: () => $$('#tools h3').map(h => ({ c: txt(h), items: $$('.tool-icon + div', h.parentElement).map(d => ({ n: txt(d.children[0]), d: txt(d.children[1]) })) })).filter(g => g.items.length),
         row: k => $('.c-row[data-contact="' + k + '"]'),
@@ -2360,61 +2382,145 @@ html[data-theme="dark"] .cf-card{background:#1e293b;color:#f4f1e8;border-color:r
 .jt-head h2{display:inline-block;margin:0 0 .9rem !important}
 .jt-eye{display:block;margin-bottom:.8rem;font-size:.74rem;font-weight:600;letter-spacing:.34em;text-transform:uppercase;color:var(--accent)}
 .jt-sub{max-width:34rem;margin:0 auto;color:var(--muted);line-height:1.6}
-.jt-list{position:relative;max-width:66rem;margin:0 auto}
-.jt-line{position:absolute;left:50%;top:0;bottom:0;width:2px;margin-left:-1px;border-radius:2px;background:var(--line)}
-.jt-fill{position:absolute;left:0;top:0;width:100%;height:0;border-radius:2px;background:linear-gradient(var(--accent2),var(--accent) 60%,#e0687a);box-shadow:0 0 10px rgba(217,141,108,.8),0 0 24px rgba(184,92,56,.4)}
-.jt-fill::after{content:"✦";position:absolute;left:50%;bottom:-8px;transform:translateX(-50%);font-size:15px;line-height:1;color:var(--accent2);text-shadow:0 0 8px var(--accent),0 0 18px var(--accent);animation:jtHead 1.6s ease-in-out infinite}
-@keyframes jtHead{0%,100%{scale:.85;opacity:.8}50%{scale:1.35;opacity:1}}
-.jt-item{position:relative;width:50%;padding:0 3.4rem 2.6rem 0}
-.jt-item:nth-of-type(even){margin-left:50%;padding:0 0 2.6rem 3.4rem}
-.jt-node{position:absolute;top:1.5rem;right:-1.2rem;width:2.4rem;height:2.4rem;display:grid;place-items:center;border-radius:50%;border:2px solid var(--line);color:var(--muted);background:#fff;z-index:2;transition:border-color .5s,color .5s,box-shadow .5s,scale .5s cubic-bezier(.2,1.6,.4,1)}
-html[data-theme="dark"] .jt-node{background:#0f172a}
-.jt-item:nth-of-type(even) .jt-node{right:auto;left:-1.2rem}
-.jt-node svg{width:1.05rem;height:1.05rem}
-.jt-item.on .jt-node{border-color:var(--accent);color:var(--accent);scale:1.12;box-shadow:0 0 0 5px rgba(184,92,56,.16),0 0 18px rgba(217,141,108,.75)}
-.jt-item.on .jt-node::after{content:"";position:absolute;inset:-2px;border-radius:50%;border:2px solid var(--accent);animation:jtPing 1.3s ease-out 1}
-@keyframes jtPing{from{transform:scale(1);opacity:.9}to{transform:scale(2.6);opacity:0}}
-.jt-card{padding:1.6rem 1.7rem;border-radius:1.25rem;border:1px solid var(--line);background:var(--panel);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);animation:none !important;
-  transition:opacity .8s ease,transform .9s cubic-bezier(.2,.8,.2,1),border-color .35s,box-shadow .5s}
-.jt-card:hover{border-color:var(--accent);transform:translateY(-3px) !important}
-.jt-date{display:block;margin-bottom:.55rem;font-size:.72rem;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--muted)}
-.jt-card h3{margin:0}
-.jt-ul{margin-top:1.1rem}
-.jt-card .jt-ul li{transition:opacity .6s ease,transform .7s cubic-bezier(.2,.8,.2,1);transition-delay:calc(.3s + var(--i,0) * .12s)}
-/* scroll-in animation only when JS is running, so the content never gets stuck hidden */
-.jt-js .jt-card{opacity:0;transform:translateX(-38px) scale(.97)}
-.jt-js .jt-item:nth-of-type(even) .jt-card{transform:translateX(38px) scale(.97)}
-.jt-js .jt-item.on .jt-card{opacity:1;transform:none;box-shadow:0 20px 50px -26px rgba(184,92,56,.6)}
-.jt-js .jt-card .jt-ul li{opacity:0;transform:translateX(-16px)}
-.jt-js .jt-item.on .jt-card .jt-ul li{opacity:1;transform:none}
+/* ===== Work Experience: a "career at a glance" bar on top, then each role as an editorial block (years on the left, accounts as cards) ===== */
+.cr-wrap{max-width:66rem;margin:0 auto}
+
+/* career bar */
+.cb{margin:0 0 3.4rem;padding:1.3rem 1.4rem 1rem;border:1px solid var(--line);border-radius:1.25rem;background:var(--panel)}
+.cb-head{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:.3rem 1rem;margin-bottom:.9rem}
+.cb-head span{font-size:.72rem;font-weight:600;letter-spacing:.26em;text-transform:uppercase;color:var(--accent)}
+.cb-hint{font-size:.78rem;color:var(--muted)}
+.cb-bar{display:flex;gap:3px;height:1.15rem}
+.cb-seg{flex:var(--g,1) 1 0;min-width:6px;height:100%;padding:0;border:0;border-radius:4px;cursor:pointer;background:var(--c);transform-origin:left center;
+  transition:transform .35s cubic-bezier(.2,1.3,.4,1),box-shadow .3s;-webkit-tap-highlight-color:transparent}
+.cb-seg:first-child{border-radius:999px 4px 4px 999px}
+.cb-seg:last-child{border-radius:4px 999px 999px 4px}
+.cb-seg:hover,.cb-seg.hl{transform:scaleY(1.45);box-shadow:0 6px 14px -6px var(--c)}
+.cb-seg:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.cb-seg.now{background:repeating-linear-gradient(-45deg,var(--c) 0 6px,color-mix(in srgb,var(--c) 80%,#fff) 6px 12px)}
+.cb-ticks{position:relative;height:1.4rem;margin-top:.45rem}
+.cb-ticks span{position:absolute;top:0;transform:translateX(-50%);font-size:.68rem;font-weight:600;letter-spacing:.06em;color:var(--muted);white-space:nowrap}
+.cb-ticks span::before{content:"";position:absolute;left:50%;top:-.4rem;width:1px;height:.3rem;background:var(--line)}
+.cb-ticks span:first-child{transform:none}.cb-ticks span:first-child::before{left:0}
+.cb-ticks span:last-child{transform:translateX(-100%)}.cb-ticks span:last-child::before{left:auto;right:0}
+
+/* role blocks */
+.cr{display:grid;grid-template-columns:13rem minmax(0,1fr);gap:2.6rem;padding:2.6rem 0;border-top:1px solid var(--line)}
+.cr:last-child{padding-bottom:0}
+.cr-side{align-self:start;display:flex;flex-direction:column;gap:.5rem}
+.cr-big{display:flex;flex-direction:column;font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;line-height:.92}
+.cr-big b{font-size:3.6rem;font-weight:700;color:var(--ink)}
+.cr-big b:last-child{color:var(--accent)}
+.cr-big i{margin:.15rem 0 .1rem .2rem;font-size:1.1rem;font-weight:600;color:var(--muted)}
+.cr-when{margin-top:.6rem;font-size:.7rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.cr-yrs{align-self:flex-start;padding:.25rem .7rem;border-radius:999px;font-size:.74rem;font-weight:600;color:var(--accent);background:rgba(184,92,56,.1)}
+.cr-body h3{margin:0;line-height:1.2}
+
+/* account cards: the current one is featured across the full width */
+.cr-acc{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;margin:1.5rem 0 0;padding:0;list-style:none}
+.cr-acc--one{grid-template-columns:minmax(0,1fr)}
+.cr-card{position:relative;overflow:hidden;padding:1.25rem 1.3rem 1.2rem;border:1px solid var(--line);border-radius:1.1rem;background:var(--panel);
+  transition:border-color .3s,transform .4s cubic-bezier(.2,.8,.2,1),box-shadow .4s}
+.cr-card::before{content:"";position:absolute;left:0;right:0;top:0;height:4px;background:var(--c)}
+.cr-card:hover,.cr-card.hl{border-color:var(--c);transform:translateY(-3px);box-shadow:0 18px 34px -24px var(--c)}
+.cr-card.flash{animation:crFlash 1.4s ease}
+@keyframes crFlash{0%,100%{box-shadow:0 0 0 0 rgba(184,92,56,0)}25%{box-shadow:0 0 0 4px rgba(184,92,56,.35)}}
+.cr-card.now{grid-column:1/-1;background:linear-gradient(135deg,rgba(184,92,56,.12),transparent 60%),var(--panel)}
+.cr-card.now::after{content:"Current";position:absolute;top:1rem;right:1rem;padding:.2rem .65rem;border-radius:999px;font-size:.64rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#fff;background:var(--accent)}
+.cr-card strong{display:block;padding-right:5rem;font-size:1rem;font-weight:600;line-height:1.35;color:var(--ink)}
+.cr-card:not(.now) strong{padding-right:0}
+.cr-card>em{display:inline-block;margin-top:.45rem;font-size:.68rem;font-style:normal;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.cr-card>span{display:block;margin-top:.6rem;font-size:.9rem;line-height:1.6;color:var(--muted)}
+.cr-card.now strong{font-size:1.15rem}
+.cr-duties{margin:0;padding:0;list-style:none;display:grid;gap:1rem}
+.cr-duties li{position:relative;padding-left:1.4rem}
+.cr-duties li::before{content:"";position:absolute;left:0;top:.45rem;width:.55rem;height:.55rem;border-radius:2px;background:var(--c,var(--accent));transform:rotate(45deg)}
+.cr-duties span{display:block;margin-top:.25rem;font-size:.9rem;line-height:1.6;color:var(--muted)}
+
+/* scroll-in: bar segments grow one after another, cards rise in (JS only, so nothing is ever stuck hidden) */
+.cr-js .cb-seg{transform:scaleX(0)}
+.cr-js .cb.in .cb-seg{transform:none;transition:transform .55s cubic-bezier(.2,.8,.2,1) calc(var(--i,0) * .09s),box-shadow .3s}
+.cr-js .cb.in .cb-seg:hover,.cr-js .cb.in .cb-seg.hl{transform:scaleY(1.45);transition-delay:0s}
+.cr-js .cr .cr-side,.cr-js .cr .cr-card{opacity:0;transform:translateY(22px)}
+.cr-js .cr.in .cr-side{opacity:1;transform:none;transition:opacity .6s ease,transform .7s cubic-bezier(.2,.8,.2,1)}
+.cr-js .cr.in .cr-card{opacity:1;transform:none;transition:opacity .55s ease calc(.15s + var(--i,0) * .08s),transform .65s cubic-bezier(.2,.8,.2,1) calc(.15s + var(--i,0) * .08s),border-color .3s,box-shadow .4s}
+.cr-js .cr.in .cr-card:hover,.cr-js .cr.in .cr-card.hl{transform:translateY(-3px);transition-delay:0s}
+
 @media(max-width:859px){
-  .jt-line{left:1.2rem;margin-left:0}
-  .jt-item,.jt-item:nth-of-type(even){width:100%;margin-left:0;padding:0 0 2.2rem 3.7rem}
-  .jt-node,.jt-item:nth-of-type(even) .jt-node{left:0;right:auto}
-  .jt-js .jt-item:not(.on) .jt-card,.jt-js .jt-item:nth-of-type(even):not(.on) .jt-card{transform:translateX(30px) scale(.97)}
-  .jt-card{padding:1.3rem 1.2rem}
+  .cr{grid-template-columns:minmax(0,1fr);gap:1.2rem;padding:2rem 0}
+  .cr-side{position:static;flex-direction:row;flex-wrap:wrap;align-items:center;gap:.4rem .8rem}
+  .cr-big{flex-direction:row;align-items:baseline;gap:.4rem}
+  .cr-big b{font-size:2.4rem}
+  .cr-big i{margin:0;font-size:1rem}
+  .cr-when{margin:0;flex-basis:100%;order:3}
+}
+@media(max-width:639px){
+  .cb{padding:1.1rem 1rem .9rem}
+  .cr-acc{grid-template-columns:minmax(0,1fr)}
+  .cr-card.now::after{top:.9rem;right:.9rem}
+}
+@media(hover:hover){.cb-hint{font-size:0}.cb-hint::after{content:"Hover or click a segment";font-size:.78rem}}
+@media(prefers-reduced-motion:reduce){
+  .cr-js .cb-seg{transform:none}
+  .cr-js .cr .cr-side,.cr-js .cr .cr-card{transform:none}
 }
 </style>
 <script>
-(function(){
-  try{
-    var list=document.getElementById('jtList');if(!list)return;
-    var fill=list.querySelector('.jt-fill'),items=[].slice.call(list.querySelectorAll('.jt-item'));
-    items.forEach(function(it){[].forEach.call(it.querySelectorAll('.jt-ul li'),function(li,i){li.style.setProperty('--i',i)})});
-    document.getElementById('experience').classList.add('jt-js');
-    var tick=false;
-    function update(){
-      tick=false;var r=list.getBoundingClientRect();if(!r.height)return;
-      var mid=innerHeight*.6,p=Math.max(0,Math.min(r.height,mid-r.top));
-      fill.style.height=p+'px';
-      items.forEach(function(it){var n=it.querySelector('.jt-node').getBoundingClientRect();if(n.top+n.height/2<=mid+60&&n.top<innerHeight)it.classList.add('on')});
-    }
-    function req(){if(!tick){tick=true;requestAnimationFrame(update)}}
-    addEventListener('scroll',req,{passive:true});addEventListener('resize',req);
-    addEventListener('hashchange',function(){[80,400,900,1600].forEach(function(t){setTimeout(req,t)})});
-    document.addEventListener('click',function(){[120,600,1200].forEach(function(t){setTimeout(req,t)})});
-    req();setTimeout(req,800);
-  }catch(err){}
+// ===== Work Experience: career bar (sizes, year ticks, hover/tap linking) + scroll-in =====
+(function () {
+    try {
+        var wrap = document.getElementById('crWrap'); if (!wrap) return;
+        var bar = document.getElementById('cbBar'), ticks = document.getElementById('cbTicks');
+        var segs = [].slice.call(bar.querySelectorAll('.cb-seg'));
+        var cards = {}; [].forEach.call(wrap.querySelectorAll('.cr-card[data-k]'), function (c) { cards[c.dataset.k] = c; });
+        function m(s) { if (s === 'now') { var d = new Date(); return d.getFullYear() * 12 + d.getMonth(); } var p = s.split('-'); return +p[0] * 12 + (+p[1] - 1); }
+        // size each segment by its real length; the current one keeps growing with today's date
+        var start = m(segs[0].dataset.from), end = m('now'), total = end - start;
+        segs.forEach(function (s, i) { s.style.setProperty('--g', Math.max(1, m(s.dataset.to) - m(s.dataset.from))); s.style.setProperty('--i', i); });
+        function drawTicks() {
+            var step = bar.clientWidth < 420 ? 3 : bar.clientWidth < 640 ? 2 : 1, html = '<span style="left:0">' + segs[0].dataset.from.slice(0, 4) + '</span>';
+            var y0 = Math.floor(start / 12) + 1, y1 = Math.floor(end / 12);
+            for (var y = y0; y <= y1; y++) {
+                var x = (y * 12 - start) / total * 100;
+                if ((y - y0 + 1) % step || x > 90) continue;
+                html += '<span style="left:' + x.toFixed(2) + '%">' + y + '</span>';
+            }
+            ticks.innerHTML = html + '<span style="left:100%">Now</span>';
+        }
+        drawTicks();
+        if ('ResizeObserver' in window) new ResizeObserver(drawTicks).observe(bar); else addEventListener('resize', drawTicks);
+
+        // link bar segments and cards both ways
+        function hl(k, on) { var c = cards[k]; if (c) c.classList.toggle('hl', on); segs.forEach(function (s) { if (s.dataset.k === k) s.classList.toggle('hl', on); }); }
+        segs.forEach(function (s) {
+            s.addEventListener('mouseenter', function () { hl(s.dataset.k, true); });
+            s.addEventListener('mouseleave', function () { hl(s.dataset.k, false); });
+            s.addEventListener('click', function () {
+                var c = cards[s.dataset.k]; if (!c) return;
+                c.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                c.classList.remove('flash'); void c.offsetWidth; c.classList.add('flash');
+            });
+        });
+        Object.keys(cards).forEach(function (k) {
+            cards[k].addEventListener('mouseenter', function () { hl(k, true); });
+            cards[k].addEventListener('mouseleave', function () { hl(k, false); });
+        });
+
+        if (!('IntersectionObserver' in window)) return;
+        [].forEach.call(wrap.querySelectorAll('.cr'), function (r) { [].forEach.call(r.querySelectorAll('.cr-card'), function (c, i) { c.style.setProperty('--i', i); }); });
+        document.getElementById('experience').classList.add('cr-js');
+        function whenReady(fn) {
+            if (document.documentElement.classList.contains('intro-on')) { setTimeout(function () { whenReady(fn); }, 250); return; }
+            fn();
+        }
+        var io = new IntersectionObserver(function (es) {
+            es.forEach(function (en) {
+                if (en.isIntersecting) { whenReady(function () { en.target.classList.add('in'); }); io.unobserve(en.target); }
+            });
+        }, { threshold: .15 });
+        io.observe(wrap.querySelector('.cb'));
+        [].forEach.call(wrap.querySelectorAll('.cr'), function (r) { io.observe(r); });
+    } catch (err) {}
 })();
 </script>
 <!-- ===== HERO PHOTO: floating, orbiting sparkles, pulsing aura, tilt on hover ===== -->
