@@ -8,6 +8,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, viewport-fit=cover">
     <meta name="theme-color" content="#f4f1e8">
+    <!-- installable app (PWA): manifest, home-screen icons, offline support via sw.js -->
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Lyn">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <title>Marilyn Dela Cruz | CX & Operations Specialist</title>
     <meta name="description" content="Portfolio of Marilyn Dela Cruz, a customer support and operations specialist with 8+ years of experience across chat, email, and voice.">
     <meta name="author" content="Marilyn Dela Cruz">
@@ -3215,6 +3222,12 @@ html[data-theme="dark"]{--pc-face:#1a2540;--pc-edge:rgba(244,241,232,.26);--pc-i
     go();
     fab.addEventListener('click', function () { fab.classList.remove('peek'); });
 })();
+</script>
+<script>
+// installable app: register the service worker (https only; skipped when the file is opened straight from disk)
+if ('serviceWorker' in navigator && location.protocol === 'https:') {
+    addEventListener('load', function () { navigator.serviceWorker.register('sw.js').catch(function () {}); });
+}
 </script>
 </body>
 </html>
