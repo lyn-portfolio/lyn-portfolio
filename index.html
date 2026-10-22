@@ -2073,6 +2073,90 @@ html[data-theme="dark"] .tm-btn:hover,html[data-theme="dark"] .tm-btn[aria-expan
     });
 })();
 </script>
+<style id="tools-tabs-css">
+/* ===== View All: one category at a time, picked from a tab bar with a sliding highlight ===== */
+#toolsAll.tt-on .tm-all-inner>.grid{display:block}
+#toolsAll.tt-on .tools-col{display:contents}
+#toolsAll.tt-on .tt-panel>h3{position:absolute;width:1px;height:1px;margin:0;padding:0;border:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+#toolsAll.tt-on .tt-panel>.space-y-4{display:grid;grid-template-columns:repeat(auto-fill,minmax(16rem,1fr));gap:.9rem}
+#toolsAll.tt-on .tt-panel>.space-y-4>*{margin-top:0!important}
+.tt-panel.tt-in>.space-y-4>*{animation:ttIn .5s cubic-bezier(.2,.8,.2,1) calc(var(--i,0) * .06s) backwards}
+@keyframes ttIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.tt-bar{position:relative;display:flex;flex-wrap:wrap;gap:.35rem;margin:.2rem 0 1.6rem;padding:.4rem;border:1px solid var(--line);border-radius:1.1rem;background:var(--panel)}
+.tt-glide{position:absolute;left:0;top:0;z-index:0;border-radius:.8rem;background:var(--accent);box-shadow:0 10px 22px -12px rgba(184,92,56,.8);pointer-events:none;
+  transition:transform .45s cubic-bezier(.3,1.2,.4,1),width .45s cubic-bezier(.3,1.2,.4,1),height .3s,top .3s}
+.tt-tab{position:relative;z-index:1;display:inline-flex;align-items:center;gap:.5rem;padding:.6rem .95rem;border:0;border-radius:.8rem;background:none;cursor:pointer;
+  font:inherit;font-size:.84rem;font-weight:600;white-space:nowrap;color:var(--muted);transition:color .3s;-webkit-tap-highlight-color:transparent}
+.tt-tab:hover{color:var(--accent)}
+.tt-tab[aria-selected="true"]{color:#fff}
+.tt-tab:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.tt-tab b{min-width:1.35rem;height:1.35rem;padding:0 .35rem;display:inline-grid;place-items:center;border-radius:999px;font-size:.7rem;font-weight:700;
+  background:rgba(184,92,56,.12);color:var(--accent);transition:background .3s,color .3s}
+.tt-tab[aria-selected="true"] b{background:rgba(255,255,255,.22);color:#fff}
+@media(max-width:767px){
+  .tt-bar{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;scroll-snap-type:x proximity;
+    -webkit-mask-image:linear-gradient(90deg,#000 85%,transparent);mask-image:linear-gradient(90deg,#000 85%,transparent)}
+  .tt-bar.at-end{-webkit-mask-image:none;mask-image:none}
+  .tt-bar::-webkit-scrollbar{display:none}
+  .tt-tab{scroll-snap-align:center;flex:none}
+}
+@media(prefers-reduced-motion:reduce){.tt-glide{transition:none}.tt-panel.tt-in>.space-y-4>*{animation:none}}
+</style>
+<script>
+// ===== Tools "View All": turn the category columns into tabs so the list stays short =====
+(function () {
+    const all = document.getElementById('toolsAll'); if (!all) return;
+    const grid = all.querySelector('.tm-all-inner > .grid'); if (!grid) return;
+    const groups = Array.from(grid.querySelectorAll('.tools-col > .reveal')).filter(g => g.querySelector('h3'));
+    if (groups.length < 2) return;
+
+    const bar = document.createElement('div'), glide = document.createElement('span');
+    bar.className = 'tt-bar'; bar.setAttribute('role', 'tablist'); bar.setAttribute('aria-label', 'Tool categories');
+    glide.className = 'tt-glide'; glide.setAttribute('aria-hidden', 'true'); bar.appendChild(glide);
+    const tabs = groups.map((g, k) => {
+        const h = g.querySelector('h3'), list = h.nextElementSibling, ico = h.querySelector('i');
+        const b = document.createElement('button');
+        b.type = 'button'; b.className = 'tt-tab'; b.id = 'ttTab' + k; b.setAttribute('role', 'tab'); b.setAttribute('aria-controls', 'ttPanel' + k);
+        if (ico) { const i = document.createElement('i'); i.className = ico.className.replace(/\bmr-\d\b/, '').trim(); i.setAttribute('aria-hidden', 'true'); b.appendChild(i); }
+        const s = document.createElement('span'); s.textContent = h.textContent.trim(); b.appendChild(s);
+        const n = document.createElement('b'); n.textContent = list ? list.children.length : 0; n.setAttribute('aria-hidden', 'true'); b.appendChild(n);
+        g.id = 'ttPanel' + k; g.classList.add('tt-panel'); g.setAttribute('role', 'tabpanel'); g.setAttribute('aria-labelledby', b.id);
+        if (list) Array.from(list.children).forEach((c, i) => c.style.setProperty('--i', i));
+        bar.appendChild(b); return b;
+    });
+    grid.parentNode.insertBefore(bar, grid);
+    all.classList.add('tt-on');
+
+    let cur = -1;
+    function place() {
+        const b = tabs[cur]; if (!b || !b.offsetWidth) return;
+        glide.style.width = b.offsetWidth + 'px'; glide.style.height = b.offsetHeight + 'px';
+        glide.style.top = b.offsetTop + 'px'; glide.style.transform = 'translateX(' + b.offsetLeft + 'px)';
+    }
+    function edge() { bar.classList.toggle('at-end', bar.scrollLeft + bar.clientWidth >= bar.scrollWidth - 4); }
+    function select(k, focus) {
+        if (k === cur) return; cur = k;
+        tabs.forEach((b, i) => { const on = i === k; b.setAttribute('aria-selected', on); b.tabIndex = on ? 0 : -1; });
+        groups.forEach((g, i) => { g.hidden = i !== k; });
+        const g = groups[k]; g.classList.remove('tt-in'); void g.offsetWidth; g.classList.add('tt-in');
+        place();
+        const b = tabs[k];
+        if (bar.scrollWidth > bar.clientWidth) bar.scrollTo({ left: b.offsetLeft - (bar.clientWidth - b.offsetWidth) / 2, behavior: 'smooth' });
+        if (focus) b.focus({ preventScroll: true });
+    }
+    bar.addEventListener('click', e => { const b = e.target.closest('.tt-tab'); if (b) select(tabs.indexOf(b)); });
+    bar.addEventListener('keydown', e => {
+        const m = { ArrowRight: cur + 1, ArrowLeft: cur - 1, Home: 0, End: tabs.length - 1 }[e.key];
+        if (m == null) return; e.preventDefault(); select((m + tabs.length) % tabs.length, true);
+    });
+    bar.addEventListener('scroll', edge, { passive: true });
+    select(0);
+    if ('ResizeObserver' in window) new ResizeObserver(() => { place(); edge(); }).observe(bar); else addEventListener('resize', place);
+    const toggle = document.getElementById('tmToggle');
+    if (toggle) toggle.addEventListener('click', () => [60, 400, 700].forEach(t => setTimeout(() => { place(); edge(); }, t)));
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(place);
+})();
+</script>
 <script>
 // card hover glow follows the cursor
 document.addEventListener('pointermove', function (e) {
