@@ -2074,33 +2074,56 @@ html[data-theme="dark"] .tm-btn:hover,html[data-theme="dark"] .tm-btn[aria-expan
 })();
 </script>
 <style id="tools-tabs-css">
-/* ===== View All: one category at a time, picked from a tab bar with a sliding highlight ===== */
+/* ===== View All: category sidebar on the left, one category's tools on the right ===== */
 #toolsAll.tt-on .tm-all-inner>.grid{display:block}
 #toolsAll.tt-on .tools-col{display:contents}
-#toolsAll.tt-on .tt-panel>h3{position:absolute;width:1px;height:1px;margin:0;padding:0;border:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-#toolsAll.tt-on .tt-panel>.space-y-4{display:grid;grid-template-columns:repeat(auto-fill,minmax(16rem,1fr));gap:.9rem}
+#toolsAll.tt-on .tt-panel>.space-y-4{display:grid;grid-template-columns:repeat(auto-fill,minmax(15rem,1fr));gap:.9rem}
 #toolsAll.tt-on .tt-panel>.space-y-4>*{margin-top:0!important}
 .tt-panel.tt-in>.space-y-4>*{animation:ttIn .5s cubic-bezier(.2,.8,.2,1) calc(var(--i,0) * .06s) backwards}
 @keyframes ttIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
-.tt-bar{position:relative;display:flex;flex-wrap:wrap;gap:.35rem;margin:.2rem 0 1.6rem;padding:.4rem;border:1px solid var(--line);border-radius:1.1rem;background:var(--panel)}
-.tt-glide{position:absolute;left:0;top:0;z-index:0;border-radius:.8rem;background:var(--accent);box-shadow:0 10px 22px -12px rgba(184,92,56,.8);pointer-events:none;
-  transition:transform .45s cubic-bezier(.3,1.2,.4,1),width .45s cubic-bezier(.3,1.2,.4,1),height .3s,top .3s}
-.tt-tab{position:relative;z-index:1;display:inline-flex;align-items:center;gap:.5rem;padding:.6rem .95rem;border:0;border-radius:.8rem;background:none;cursor:pointer;
-  font:inherit;font-size:.84rem;font-weight:600;white-space:nowrap;color:var(--muted);transition:color .3s;-webkit-tap-highlight-color:transparent}
-.tt-tab:hover{color:var(--accent)}
-.tt-tab[aria-selected="true"]{color:#fff}
+/* the category name becomes the panel's heading */
+#toolsAll.tt-on .tt-panel>h3{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;margin:0 0 1.2rem;padding:0 0 .8rem;border-bottom:1px solid var(--line);
+  font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-weight:600;font-size:1.9rem;line-height:1.1;letter-spacing:0;text-transform:none;color:var(--ink)}
+#toolsAll.tt-on .tt-panel>h3 i{display:none}
+#toolsAll.tt-on .tt-panel>h3::after{content:attr(data-count);flex:none;font-family:'Jost',system-ui,sans-serif;font-style:normal;font-size:.7rem;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--accent)}
+.tt-panel.tt-in>h3{animation:ttIn .45s cubic-bezier(.2,.8,.2,1) backwards}
+
+/* sidebar */
+.tt-bar{position:relative;display:flex;flex-direction:column;gap:.2rem;padding:.6rem;border:1px solid var(--line);border-radius:1.2rem;background:var(--panel)}
+.tt-bar::before{content:"Browse by category";display:block;padding:.55rem .75rem .7rem;font-size:.68rem;font-weight:600;letter-spacing:.26em;text-transform:uppercase;color:var(--muted)}
+.tt-glide{position:absolute;left:0;top:0;z-index:0;border-radius:.8rem;background:rgba(184,92,56,.1);box-shadow:inset 3px 0 0 var(--accent);pointer-events:none;
+  transition:transform .45s cubic-bezier(.3,1.2,.4,1),width .45s cubic-bezier(.3,1.2,.4,1),height .35s,top .45s cubic-bezier(.3,1.2,.4,1)}
+.tt-tab{position:relative;z-index:1;display:flex;align-items:center;gap:.8rem;width:100%;padding:.6rem .75rem;border:0;border-radius:.8rem;background:none;cursor:pointer;text-align:left;
+  font:inherit;font-size:.88rem;font-weight:500;line-height:1.3;color:var(--muted);transition:color .3s,background .3s;-webkit-tap-highlight-color:transparent}
+.tt-tab:hover{color:var(--ink);background:rgba(148,163,184,.08)}
+.tt-tab[aria-selected="true"]{color:var(--ink);font-weight:600;background:none}
 .tt-tab:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.tt-tab b{min-width:1.35rem;height:1.35rem;padding:0 .35rem;display:inline-grid;place-items:center;border-radius:999px;font-size:.7rem;font-weight:700;
-  background:rgba(184,92,56,.12);color:var(--accent);transition:background .3s,color .3s}
-.tt-tab[aria-selected="true"] b{background:rgba(255,255,255,.22);color:#fff}
+.tt-tab>i{flex:none;width:2.1rem;height:2.1rem;display:grid;place-items:center;border-radius:.65rem;font-size:.85rem;color:var(--accent);background:rgba(184,92,56,.1);
+  transition:background .3s,color .3s,transform .4s cubic-bezier(.2,1.4,.4,1)}
+.tt-tab:hover>i{transform:rotate(-8deg)}
+.tt-tab[aria-selected="true"]>i{background:var(--accent);color:#fff;box-shadow:0 8px 16px -8px rgba(184,92,56,.8)}
+.tt-tab>span{flex:1;min-width:0}
+.tt-tab>b{flex:none;font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:1.15rem;font-weight:600;color:var(--muted);opacity:.7;transition:color .3s,opacity .3s}
+.tt-tab[aria-selected="true"]>b{color:var(--accent);opacity:1}
+@media(min-width:768px){
+  #toolsAll.tt-on .tm-all-inner{display:grid;grid-template-columns:15.5rem minmax(0,1fr);column-gap:2rem;align-items:start}
+}
+@media(min-width:1024px){
+  #toolsAll.tt-on .tm-all-inner{grid-template-columns:18rem minmax(0,1fr);column-gap:2.6rem}
+}
+/* phones: the sidebar becomes a swipeable strip above the tools */
 @media(max-width:767px){
-  .tt-bar{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;scroll-snap-type:x proximity;
+  .tt-bar{flex-direction:row;gap:.3rem;margin-bottom:1.4rem;padding:.45rem;overflow-x:auto;scrollbar-width:none;scroll-snap-type:x proximity;
     -webkit-mask-image:linear-gradient(90deg,#000 85%,transparent);mask-image:linear-gradient(90deg,#000 85%,transparent)}
+  .tt-bar::before{display:none}
   .tt-bar.at-end{-webkit-mask-image:none;mask-image:none}
   .tt-bar::-webkit-scrollbar{display:none}
-  .tt-tab{scroll-snap-align:center;flex:none}
+  .tt-glide{box-shadow:inset 0 -3px 0 var(--accent)}
+  .tt-tab{flex:none;width:auto;gap:.55rem;padding:.5rem .8rem .5rem .5rem;white-space:nowrap;font-size:.84rem;scroll-snap-align:center}
+  .tt-tab>i{width:1.8rem;height:1.8rem;font-size:.75rem}
+  #toolsAll.tt-on .tt-panel>h3{font-size:1.55rem}
 }
-@media(prefers-reduced-motion:reduce){.tt-glide{transition:none}.tt-panel.tt-in>.space-y-4>*{animation:none}}
+@media(prefers-reduced-motion:reduce){.tt-glide{transition:none}.tt-panel.tt-in>.space-y-4>*,.tt-panel.tt-in>h3{animation:none}}
 </style>
 <script>
 // ===== Tools "View All": turn the category columns into tabs so the list stays short =====
@@ -2119,7 +2142,9 @@ html[data-theme="dark"] .tm-btn:hover,html[data-theme="dark"] .tm-btn[aria-expan
         b.type = 'button'; b.className = 'tt-tab'; b.id = 'ttTab' + k; b.setAttribute('role', 'tab'); b.setAttribute('aria-controls', 'ttPanel' + k);
         if (ico) { const i = document.createElement('i'); i.className = ico.className.replace(/\bmr-\d\b/, '').trim(); i.setAttribute('aria-hidden', 'true'); b.appendChild(i); }
         const s = document.createElement('span'); s.textContent = h.textContent.trim(); b.appendChild(s);
-        const n = document.createElement('b'); n.textContent = list ? list.children.length : 0; n.setAttribute('aria-hidden', 'true'); b.appendChild(n);
+        const count = list ? list.children.length : 0;
+        const n = document.createElement('b'); n.textContent = count; n.setAttribute('aria-hidden', 'true'); b.appendChild(n);
+        h.dataset.count = count + (count === 1 ? ' tool' : ' tools');
         g.id = 'ttPanel' + k; g.classList.add('tt-panel'); g.setAttribute('role', 'tabpanel'); g.setAttribute('aria-labelledby', b.id);
         if (list) Array.from(list.children).forEach((c, i) => c.style.setProperty('--i', i));
         bar.appendChild(b); return b;
