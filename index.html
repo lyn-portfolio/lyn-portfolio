@@ -1881,6 +1881,11 @@ html[data-theme="dark"] .tm-btn:hover,html[data-theme="dark"] .tm-btn[aria-expan
             .map(id => { const el = document.getElementById(id); if (!el) return ''; const c = el.cloneNode(true); c.querySelectorAll('.tm-marquee').forEach(n => n.remove()); return '## ' + id.toUpperCase() + '\n' + txt(c); })
             .filter(Boolean).join('\n\n').slice(0, 9000);
     }
+    // who the assistant is: Lyn's helper, never Lyn herself (also sent as its own field in case the worker reads it)
+    const PERSONA = 'ASSISTANT ROLE (follow strictly): You are the AI assistant of Lyn Dela Cruz\'s portfolio website. You are NOT Lyn and must never speak as her or claim to be her. ' +
+        'Always talk about Lyn in the third person: "Lyn", "she/her" (in Tagalog/Taglish: "si Lyn", "niya", "ang work ni Lyn"). ' +
+        'Never use "I", "my", "me", "ako", "ko" or "akin" for Lyn\'s experience, skills, tools or personal life; say "Lyn has...", "her experience...", "ang experience ni Lyn...". ' +
+        'You may call yourself "Lyn\'s assistant". Reply in the same language the visitor uses (English, Tagalog or Taglish) and keep a friendly, helpful tone.';
     const inl = t => esc(t).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
     function toHtml(t) {
         return t.trim().split(/\n{2,}/).map(par => {
@@ -1909,7 +1914,7 @@ html[data-theme="dark"] .tm-btn:hover,html[data-theme="dark"] .tm-btn[aria-expan
         const t0 = Date.now(), ctrl = new AbortController(), to = setTimeout(() => ctrl.abort(), 20000);
         try {
             const res = await fetch(AI_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, signal: ctrl.signal,
-                body: JSON.stringify({ messages: cleanHist(), context: buildContext() }) });
+                body: JSON.stringify({ messages: cleanHist(), context: PERSONA + '\n\n' + buildContext(), persona: PERSONA }) });
             clearTimeout(to);
             if (!res.ok) throw new Error('http ' + res.status);
             const data = await res.json();
