@@ -1200,7 +1200,7 @@ html[data-theme="dark"] .tm-btn:hover,html[data-theme="dark"] .tm-btn[aria-expan
                     <button type="button" class="deck-dot" data-i="2" aria-label="Recommendation 3"></button>
                 </div>
                 <button type="button" class="deck-btn" data-deck="next" aria-label="Next recommendation"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
-                <p class="deck-hint" aria-hidden="true">Swipe or drag the top card</p>
+                <p class="deck-hint" aria-hidden="true">Drag the top card away to shuffle</p>
                 <p class="deck-sr" id="recDeckLive" aria-live="polite"></p>
             </div>
         </div>
@@ -2266,62 +2266,60 @@ html[data-theme="dark"] .fx-drift i{color:#f6e3d4;text-shadow:0 0 5px rgba(255,2
 </style>
 
 <style id="rec-deck-css">
-/* ===== Management Recommendations: on phones the three cards become a hand of playing cards ===== */
-:root{--pc-face:#fffaf1;--pc-edge:rgba(30,41,59,.2);--pc-ink:#1e293b;--pc-red:#c0392b}
-html[data-theme="dark"]{--pc-face:#1a2540;--pc-edge:rgba(244,241,232,.26);--pc-ink:#f4f1e8;--pc-red:#ff8f85}
+/* ===== Management Recommendations: a fanned hand of cards that shuffles like a real deck ===== */
+:root{--pc-face:#fffaf1;--pc-edge:rgba(30,41,59,.2);--pc-ink:#1e293b}
+html[data-theme="dark"]{--pc-face:#1a2540;--pc-edge:rgba(244,241,232,.26);--pc-ink:#f4f1e8}
 .deck-ui{display:none}
 .deck-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
-#recDeck.deck-on{display:grid!important;grid-template-columns:minmax(0,1fr)!important;justify-items:center;gap:0!important;padding:.4rem 0 2.4rem;touch-action:pan-y}
-#recDeck.deck-on:focus-visible{outline:2px solid var(--accent);outline-offset:6px;border-radius:1rem}
+#recDeck.deck-on{display:block!important;gap:0!important;padding:1rem 0 2.6rem;touch-action:pan-y}
+.pr-scene{position:relative;width:min(100% - 1.5rem,31rem);min-height:25rem;margin:0 auto;cursor:grab;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;touch-action:pan-y}
+.pr-scene.grabbing{cursor:grabbing}
+.pr-scene:focus-visible{outline:2px solid var(--accent);outline-offset:10px;border-radius:1.4rem}
+.pr-stage{position:absolute;inset:0}
 
-/* the card itself: every stacking position is just a set of variables, so drag / fling / deal can all animate the same transform */
-#recDeck.deck-on>.pc{
-  --x:0px;--y:0px;--r:0deg;--s:1;--dx:0px;--dr:0deg;--d:0ms;
-  grid-area:1/1;position:relative;display:flex!important;flex-direction:column;justify-content:space-between;
-  width:min(100% - 1.5rem,19.75rem);min-height:calc(min(100vw - 4.5rem,19.75rem) * 1.4);
-  padding:3.5rem 1.5rem 3.5rem!important;border-radius:1.1rem!important;
-  border:1px solid var(--pc-edge)!important;background:var(--pc-face)!important;color:var(--pc-ink);
-  box-shadow:0 22px 34px -18px rgba(30,41,59,.55),0 2px 5px rgba(30,41,59,.1)!important;
-  transform-origin:50% 92%;
-  transform:translate3d(calc(var(--x) + var(--dx)),var(--y),0) rotate(calc(var(--r) + var(--dr))) scale(var(--s))!important;
-  opacity:1!important;filter:none!important;
-  transition:transform .6s cubic-bezier(.22,1.15,.36,1),opacity .3s ease,box-shadow .4s ease!important;transition-delay:0ms!important;
-  touch-action:pan-y;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;cursor:grab;will-change:transform;
+/* a face of the prism */
+#recDeck.deck-on .pr-stage>.pc{
+  position:absolute!important;left:0;right:0;top:0;bottom:0;margin:0!important;
+  display:flex!important;flex-direction:column;justify-content:space-between;overflow:hidden;
+  padding:3rem 2.4rem 2.6rem!important;border-radius:1.4rem!important;
+  border:1px solid var(--pc-edge)!important;color:var(--pc-ink);
+  background:radial-gradient(120% 70% at 100% 0%,rgba(184,92,56,.16),transparent 60%),var(--pc-face)!important;
+  outline:1px solid var(--pc-edge);outline-offset:-.6rem;
+  box-shadow:0 30px 50px -28px rgba(0,0,0,.55)!important;
+  transform-origin:50% 100%;will-change:transform;
+  filter:none!important;transition:none!important;
+  -webkit-backdrop-filter:none!important;backdrop-filter:none!important;
 }
-#recDeck.deck-on>.pc[data-pos="0"]{--x:0px;--y:0px;--r:0deg;--s:1;--d:360ms;z-index:3}
-#recDeck.deck-on>.pc[data-pos="1"]{--x:9px;--y:10px;--r:3deg;--s:.975;--d:180ms;z-index:2;box-shadow:0 14px 24px -16px rgba(30,41,59,.5)!important}
-#recDeck.deck-on>.pc[data-pos="2"]{--x:-9px;--y:20px;--r:-3.4deg;--s:.95;--d:0ms;z-index:1;box-shadow:0 10px 18px -14px rgba(30,41,59,.45)!important}
+#recDeck.deck-on .pr-stage>.pc::before,#recDeck.deck-on .pr-stage>.pc::after{display:none!important}
+/* big quote mark watermark */
+#recDeck.deck-on .pr-stage>.pc>h3{position:relative;z-index:1;margin:0 0 1rem;font-family:'Cormorant Garamond',Georgia,serif;font-size:2rem;line-height:1.1;font-weight:600;font-style:italic}
+#recDeck.deck-on .pr-stage>.pc>p{position:relative;z-index:1;margin:0 0 1.3rem;font-size:1rem;line-height:1.7}
+#recDeck.deck-on .pr-stage>.pc>div{position:relative;z-index:1;border-top:1px dashed var(--pc-edge)!important;padding-top:.9rem}
 
-/* before the deal: the cards wait below the table, each at its own angle */
-#recDeck.deck-on:not(.dealt)>.pc[data-pos]{--x:0px;--y:190px;--r:-14deg;--s:.86;opacity:0!important}
-#recDeck.deck-on:not(.dealt)>.pc[data-pos="1"]{--x:46px;--r:11deg}
-#recDeck.deck-on:not(.dealt)>.pc[data-pos="2"]{--x:-46px;--r:-22deg}
-/* the deal: bottom card lands first, the top card last */
-#recDeck.deck-on.dealing>.pc{transition:transform .85s cubic-bezier(.2,.9,.25,1.12),opacity .12s linear,box-shadow .4s ease!important;transition-delay:var(--d)!important}
+/* cards: hidden until the shuffle starts, then fade in as the pile is cut */
+#recDeck.deck-on .pr-scene .pr-stage>.pc{opacity:0!important;transition:opacity .3s ease!important}
+#recDeck.deck-on .pr-scene.shown .pr-stage>.pc{opacity:1!important}
+/* a glint crosses whichever card has just landed on top */
+.pr-sheen{position:absolute;top:-10%;bottom:-10%;left:0;width:38%;z-index:3;opacity:0;pointer-events:none;
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,.22),transparent);transform:translateX(-160%) skewX(-16deg)}
+#recDeck.deck-on .pr-stage>.pc.is-front .pr-sheen{animation:prSweep 1.1s ease .25s 1 both}
+@keyframes prSweep{from{opacity:1;transform:translateX(-160%) skewX(-16deg)}to{opacity:1;transform:translateX(420%) skewX(-16deg)}}
 
-#recDeck.deck-on>.pc.flying{z-index:6;opacity:0!important;transition:transform .42s cubic-bezier(.45,.05,.85,.45),opacity .42s ease .04s!important}
-#recDeck.deck-on>.pc.entering{z-index:6}
-#recDeck.deck-on>.pc.dragging{transition:none!important;cursor:grabbing;box-shadow:0 30px 42px -18px rgba(30,41,59,.6)!important}
-#recDeck.deck-on>.pc.no-t{transition:none!important}
-
-/* card face */
-#recDeck.deck-on>.pc::after{content:"";position:absolute;inset:.5rem;height:auto;border:1px solid var(--pc-edge);border-radius:.75rem;background:none!important;transform:none!important;transition:none!important;pointer-events:none}
-#recDeck.deck-on>.pc>h3{position:relative;z-index:1;margin:0 0 .9rem;font-size:1.4rem;line-height:1.2;font-style:italic}
-#recDeck.deck-on>.pc>p{position:relative;z-index:1;margin:0 0 1.2rem;font-size:.9rem;line-height:1.65}
-#recDeck.deck-on>.pc>div{position:relative;z-index:1;border-top:1px dashed var(--pc-edge)!important;padding-top:.8rem}
-
-/* a glossy sweep crosses whichever card has just come to the top */
-#recDeck.deck-on>.pc::before{display:block!important;content:"";position:absolute;top:0;bottom:0;left:0;width:42%;inset-inline-end:auto;opacity:0;z-index:2;pointer-events:none;
-  background:linear-gradient(100deg,transparent,rgba(255,255,255,.75),transparent)!important;transform:translateX(-140%) skewX(-18deg);transition:none!important}
-html[data-theme="dark"] #recDeck.deck-on>.pc::before{background:linear-gradient(100deg,transparent,rgba(255,255,255,.14),transparent)!important}
-#recDeck.deck-on.dealt:not(.dealing)>.pc[data-pos="0"]::before{animation:pcSheen 1.1s ease .2s 1 both}
-@keyframes pcSheen{from{opacity:1;transform:translateX(-140%) skewX(-18deg)}to{opacity:1;transform:translateX(340%) skewX(-18deg)}}
+/* the text settles in a beat after its face lands in front */
+#recDeck.deck-on .pr-stage>.pc>h3,
+#recDeck.deck-on .pr-stage>.pc>p,
+#recDeck.deck-on .pr-stage>.pc>div{opacity:.35;transform:translateY(12px);transition:opacity .5s ease,transform .7s cubic-bezier(.2,.9,.25,1)}
+#recDeck.deck-on .pr-stage>.pc.is-front>h3{opacity:1;transform:none;transition-delay:.12s}
+#recDeck.deck-on .pr-stage>.pc.is-front>p{opacity:1;transform:none;transition-delay:.24s}
+#recDeck.deck-on .pr-stage>.pc.is-front>div{opacity:1;transform:none;transition-delay:.36s}
 
 /* controls */
 #recDeckUi.deck-on{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:.4rem .9rem}
 .deck-btn{width:2.75rem;height:2.75rem;display:grid;place-items:center;border-radius:50%;border:1.5px solid var(--accent);background:transparent;color:var(--accent);cursor:pointer;transition:background .25s,color .25s,transform .25s}
-.deck-btn:active{background:var(--accent);color:#fff;transform:scale(.93)}
+.deck-btn:hover{background:var(--accent);color:#fff}
+.deck-btn:active{transform:scale(.92)}
+.deck-btn:focus-visible,.deck-dot:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .deck-dots{display:flex;align-items:center}
 .deck-dot{width:1.7rem;height:2.75rem;display:grid;place-items:center;padding:0;border:0;background:none;cursor:pointer}
 .deck-dot::before{content:"";width:.5rem;height:.5rem;border-radius:999px;background:rgba(184,92,56,.32);transition:width .35s cubic-bezier(.22,1.15,.36,1),background .3s}
@@ -2329,11 +2327,18 @@ html[data-theme="dark"] #recDeck.deck-on>.pc::before{background:linear-gradient(
 .deck-hint{flex-basis:100%;margin:.2rem 0 0;text-align:center;font-size:.85rem;color:var(--muted);transition:opacity .6s ease}
 #recDeckUi.used .deck-hint{opacity:0}
 
-@media (max-width:359px){
-  #recDeck.deck-on>.pc{padding:3.3rem 1.15rem 3.4rem!important}
-  #recDeck.deck-on>.pc>h3{font-size:1.2rem}
-  #recDeck.deck-on>.pc>p{font-size:.82rem;line-height:1.55;margin-bottom:.9rem}
+@media (max-width:767px){
+  .pr-scene{min-height:31rem}
+  #recDeck.deck-on .pr-stage>.pc{padding:2.6rem 1.5rem 2.3rem!important}
+  #recDeck.deck-on .pr-stage>.pc>h3{font-size:1.6rem}
+  #recDeck.deck-on .pr-stage>.pc>p{font-size:.92rem;line-height:1.6}
 }
+@media (prefers-reduced-motion:reduce){
+  #recDeck.deck-on .pr-stage>.pc>h3,#recDeck.deck-on .pr-stage>.pc>p,#recDeck.deck-on .pr-stage>.pc>div{transform:none;transition:opacity .3s}
+  .pr-sheen{display:none}
+  #recDeck.deck-on .pr-scene .pr-stage>.pc{transition:opacity .2s!important}
+}
+/* ---- left-hand list ---- */
 .rec-list{display:none}
 .rec-eyebrow{display:flex;align-items:center;gap:.7rem;margin:0 0 .9rem;font-size:.74rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--accent)}
 .rec-list-lead{margin:0 0 1.5rem;max-width:27rem;font-family:'Cormorant Garamond',Georgia,serif;font-size:1.6rem;font-style:italic;line-height:1.35;color:var(--ink)}
@@ -2351,244 +2356,259 @@ html[data-theme="dark"] #recDeck.deck-on>.pc::before{background:linear-gradient(
 .rl-go{flex:none;color:var(--accent);opacity:0;transform:translateX(-6px);transition:opacity .3s,transform .3s}
 .rec-list button:hover .rl-go,.rec-list button[aria-current="true"] .rl-go{opacity:1;transform:none}
 @media (min-width:1024px){
-  #recWrap{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);column-gap:4rem;align-items:center}
+  #recWrap{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);column-gap:4.5rem;align-items:center}
   #recWrap>h2{grid-column:1/-1;margin-bottom:1.5rem}
   #recWrap>.rec-list{display:flex;flex-direction:column;gap:.7rem;grid-column:1;grid-row:2/4;align-self:start;padding-top:.4rem}
   #recWrap>#recDeck{grid-column:2;grid-row:2}
   #recWrap>#recDeckUi{grid-column:2;grid-row:3}
 }
-#recDeck.deck-on>.pc.swap-out{z-index:6;transition:transform .3s cubic-bezier(.3,.7,.4,1),box-shadow .3s ease!important}
-/* no blur: drop the glass backdrop-filter on the cards and the scroll-in de-blur in this section */
-#recDeck.deck-on>.pc{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
 #recommendations .reveal{filter:none!important}
-@media (min-width:768px){
-  #recDeck.deck-on{padding-bottom:3.4rem}
-  #recDeck.deck-on>.pc{width:min(100% - 3rem,27rem);min-height:24rem;padding:4rem 2.4rem 3.6rem!important}
-  #recDeck.deck-on>.pc>h3{font-size:1.7rem;margin-bottom:1.1rem}
-  #recDeck.deck-on>.pc>p{font-size:1rem;line-height:1.7}
-  #recDeck.deck-on>.pc{transition:transform .95s cubic-bezier(.22,1.1,.36,1),opacity .3s ease,box-shadow .4s ease!important}
-  #recDeck.deck-on>.pc.no-t{transition:none!important}
-  #recDeck.deck-on>.pc{transform-origin:50% 100%}
-  #recDeck.deck-on>.pc[data-pos="0"]{--x:0px;--y:0px;--r:0deg;--s:1}
-  #recDeck.deck-on>.pc[data-pos="1"]{--x:0px;--y:0px;--r:-5deg;--s:1}
-  #recDeck.deck-on>.pc[data-pos="2"]{--x:0px;--y:0px;--r:-10deg;--s:1}
-}
-@media (prefers-reduced-motion:reduce){
-  #recDeck.deck-on>.pc,#recDeck.deck-on.dealing>.pc{transition:transform .45s ease,opacity .4s ease,box-shadow .3s ease!important;transition-delay:0ms!important}
-  #recDeck.deck-on>.pc.flying{transition:transform .45s ease,opacity .4s ease!important}
-  #recDeck.deck-on>.pc.no-t{transition:none!important}
-  #recDeck.deck-on.dealt:not(.dealing)>.pc[data-pos="0"]::before{animation:none}
-}
 </style>
 
 <script>
-// ===== Recommendations deck (phones only): swipe / arrows / dots, dealt in when it scrolls into view =====
+// ===== Recommendations: a fanned hand of cards. Arrows, dots, the name list, keyboard and drag all run the same shuffle =====
 (function () {
     var deck = document.getElementById('recDeck'), ui = document.getElementById('recDeckUi');
     if (!deck || !ui) return;
     var cards = Array.prototype.slice.call(deck.querySelectorAll('.pc')), N = cards.length;
-    if (!N) return;
+    if (N < 2) return;
     var dots = Array.prototype.slice.call(ui.querySelectorAll('.deck-dot'));
     var listBtns = Array.prototype.slice.call(document.querySelectorAll('#recList button'));
     var live = document.getElementById('recDeckLive');
-    var mq = window.matchMedia('all'), rm = window.matchMedia('(prefers-reduced-motion: reduce)');
-        var top = 0, busy = false, on = false, io = null, drag = null, hinted = false, timers = [], dealTimer = null;
+    var hint = ui.querySelector('.deck-hint'); if (hint) hint.textContent = 'Drag the top card away to shuffle';
+    var rm = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    // ---- build the table ----
+    var scene = document.createElement('div'), stage = document.createElement('div');
+    scene.className = 'pr-scene'; stage.className = 'pr-stage';
+    scene.tabIndex = 0; scene.setAttribute('role', 'group'); scene.setAttribute('aria-roledescription', 'carousel'); scene.setAttribute('aria-label', 'Management recommendations');
+    cards.forEach(function (c, k) {
+        c.setAttribute('role', 'group'); c.setAttribute('aria-roledescription', 'card');
+        c.setAttribute('aria-label', 'Recommendation ' + (k + 1) + ' of ' + N);
+        var sn = document.createElement('i'); sn.className = 'pr-sheen'; sn.setAttribute('aria-hidden', 'true'); c.appendChild(sn);
+        stage.appendChild(c);
+    });
+    scene.appendChild(stage); deck.appendChild(scene);
+    deck.classList.add('deck-on'); ui.classList.add('deck-on');
+
+    // ---- state: order[0] is the top card; every card is a little spring-driven body ----
+    var order = cards.map(function (_, i) { return i; });
+    var S = cards.map(function () { return { x: 0, y: 0, r: 0, s: 1, vx: 0, vy: 0, vr: 0, vs: 0, tx: 0, ty: 0, tr: 0, ts: 1, z: 1, held: false }; });
+    var K = rm.matches ? 300 : 190, Cd = rm.matches ? 34 : 21;
+    var W = 480, raf = 0, last = 0, gen = 0, busy = false, queue = [], idx = -1, used = false, entered = false, drag = null, timers = [];
 
     function later(fn, ms) { var t = setTimeout(fn, ms); timers.push(t); return t; }
-    function interactive() { return on && deck.classList.contains('dealt') && !deck.classList.contains('dealing'); }
+    function slot(p) { return { x: 0, y: 0, r: -5 * p, s: 1 }; }
+    function aim(i, t) { var s = S[i]; if (t.x != null) s.tx = t.x; if (t.y != null) s.ty = t.y; if (t.r != null) s.tr = t.r; if (t.s != null) s.ts = t.s; kick(); }
+    function snap(i, t) { var s = S[i]; s.x = s.tx = t.x; s.y = s.ty = t.y; s.r = s.tr = t.r; s.s = s.ts = t.s; s.vx = s.vy = s.vr = s.vs = 0; }
+    function fanOut() { order.forEach(function (ci, p) { var t = slot(p); aim(ci, t); S[ci].z = N - p; }); }
 
-    function render() {
-        cards.forEach(function (c, i) {
-            var p = (i - top + N) % N;
-            if (!c.classList.contains('flying')) c.setAttribute('data-pos', p);
-            c.setAttribute('aria-hidden', p === 0 ? 'false' : 'true');
-            if (p === 0) c.removeAttribute('inert'); else c.setAttribute('inert', '');
-            c.setAttribute('aria-label', 'Recommendation ' + (i + 1) + ' of ' + N);
-        });
-        dots.forEach(function (d, i) { d.setAttribute('aria-current', i === top ? 'true' : 'false'); });
-        listBtns.forEach(function (b, i) { b.setAttribute('aria-current', i === top ? 'true' : 'false'); });
-    }
-    function announce() {
-        var n = cards[top].querySelector('.font-bold');
-        if (live) live.textContent = 'Recommendation ' + (top + 1) + ' of ' + N + (n ? ': ' + n.textContent : '');
-    }
-    function touched() { ui.classList.add('used'); }
-
-    // a hand of cards: the card is pulled out, swung round and tucked in at the back while the rest fan forward
-    var fan = window.matchMedia('(min-width: 768px)');
-    function pull(c, sign) {
-        if (rm.matches) return { dx: sign * 48, dr: 0, y: -12 };   // reduced-motion devices still see the card being pulled out, just a small, calm move
-        return fan.matches ? { dx: sign * 40, dr: sign * 16, y: -26 } : { dx: sign * c.offsetWidth * 0.62, dr: sign * 6, y: 0 };
-    }
-    function swapOut(c, sign, mid, done) {
-        busy = true;
-        var m = pull(c, sign);
-        if (m) {
-            c.classList.add('swap-out');
-            c.style.setProperty('--dx', m.dx + 'px'); c.style.setProperty('--dr', m.dr + 'deg');
-            if (m.y) c.style.setProperty('--y', m.y + 'px');
+    function paint() {
+        for (var i = 0; i < N; i++) {
+            var s = S[i], c = cards[i];
+            c.style.setProperty('transform', 'translate3d(' + s.x.toFixed(2) + 'px,' + s.y.toFixed(2) + 'px,0) rotate(' + s.r.toFixed(3) + 'deg) scale(' + s.s.toFixed(4) + ')', 'important');
+            c.style.zIndex = s.z;
         }
-        later(function () {
-            mid();                                      // new order: every card glides to its new place in the fan
-            ['--dx', '--dr', '--y'].forEach(function (k) { c.style.removeProperty(k); });
-            c.classList.remove('swap-out');
-            later(function () { busy = false; if (done) done(); }, 600);
-        }, m ? 300 : 0);
     }
-    function moveNext(sign, cb) {
-        var c = cards[top];
-        c.classList.remove('dragging');
-        swapOut(c, sign, function () { top = (top + 1) % N; render(); }, cb);
+    function tick(now) {
+        var dt = Math.min(.034, (now - last) / 1000 || .016), moving = false; last = now;
+        S.forEach(function (s) {
+            if (s.held) return;
+            ['x', 'y', 'r', 's'].forEach(function (k) {
+                var v = 'v' + k, t = 't' + k, kk = k === 's' ? K * 2 : K;
+                s[v] += (kk * (s[t] - s[k]) - Cd * s[v]) * dt; s[k] += s[v] * dt;
+                if (Math.abs(s[t] - s[k]) > .02 || Math.abs(s[v]) > .05) moving = true;
+            });
+        });
+        paint();
+        if (moving) raf = requestAnimationFrame(tick); else raf = 0;
     }
-    // the card at the back is pulled out from behind and takes the front spot
-    function movePrev(cb) {
-        var idx = (top - 1 + N) % N, c = cards[idx];
-        swapOut(c, -1, function () { top = idx; render(); }, cb);
+    function kick() { if (!raf) { last = performance.now(); raf = requestAnimationFrame(tick); } }
+
+    function sync() {
+        var i = order[0]; if (i === idx) return;
+        var first = idx < 0; idx = i;
+        cards.forEach(function (c, k) {
+            var f = k === i;
+            c.classList.toggle('is-front', f);
+            c.setAttribute('aria-hidden', f ? 'false' : 'true');
+            if (f) c.removeAttribute('inert'); else c.setAttribute('inert', '');
+        });
+        dots.forEach(function (d, k) { d.setAttribute('aria-current', k === i ? 'true' : 'false'); });
+        listBtns.forEach(function (b, k) { b.setAttribute('aria-current', k === i ? 'true' : 'false'); });
+        if (live && !first) { var n = cards[i].querySelector('.font-bold'); live.textContent = 'Recommendation ' + (i + 1) + ' of ' + N + (n ? ': ' + n.textContent : ''); }
     }
-    // dragging: the card keeps flying off the side you flung it to, then slips to the back of the deck
-    function flyAway(sign, cb) {
-        var c = cards[top], W = Math.max(window.innerWidth, 320);
+    function touched() { if (!used) { used = true; ui.classList.add('used'); } }
+
+    // ---- the moves ----
+    // next: the top card is pulled out to the side, swung round and tucked in underneath while the rest fan forward
+    // prev: the bottom card is slid out from under the pile and laid on top
+    function mkNext(side, fast) {
+        return function (done) {
+            var c = order[0], T = fast ? 170 : 250, g = gen;
+            S[c].z = N + 3;
+            aim(c, rm.matches ? { x: side * 30, y: -8, r: 0 } : { x: side * W * .56, y: -34, r: side * 15 });
+            later(function () {
+                if (g !== gen) return;
+                order.push(order.shift()); sync();
+                S[c].z = 1;                                           // slips under the others
+                order.forEach(function (ci, p) { if (ci !== c) S[ci].z = N - p + 1; });
+                fanOut(); S[c].z = 1;
+                later(done, fast ? 120 : 190);
+            }, T);
+        };
+    }
+    function mkPrev(side, fast) {
+        return function (done) {
+            var c = order[N - 1], T = fast ? 170 : 250, g = gen;
+            aim(c, rm.matches ? { x: side * 30, y: -8, r: 0 } : { x: side * W * .56, y: -12, r: side * -13 });
+            later(function () { if (g === gen) S[c].z = N + 3; }, T * .55);
+            later(function () {
+                if (g !== gen) return;
+                order.unshift(order.pop()); sync(); fanOut(); S[c].z = N + 3;
+                later(function () { if (g === gen) S[c].z = N; }, 260);
+                later(done, fast ? 120 : 190);
+            }, T);
+        };
+    }
+    function pump() {
+        if (busy || !queue.length) return;
         busy = true;
-        c.classList.remove('dragging');
-        c.classList.add('flying');
-        c.style.setProperty('--dx', (sign * W * 1.1) + 'px');
-        c.style.setProperty('--dr', (sign * 26) + 'deg');
-        top = (top + 1) % N; render();                 // the others step forward while it is still leaving
-        later(function () {
-            c.classList.add('no-t'); c.classList.remove('flying');
-            c.style.removeProperty('--dx'); c.style.removeProperty('--dr');
-            c.setAttribute('data-pos', (cards.indexOf(c) - top + N) % N);
-            void c.offsetWidth;
-            c.classList.remove('no-t');
-            busy = false; if (cb) cb();
-        }, rm.matches ? 450 : 420);
+        queue.shift()(function () { busy = false; pump(); });
     }
-    function step(dir) {
-        if (busy || !interactive()) return;
-        touched();
-        if (dir > 0) moveNext(-1, announce); else movePrev(announce);
-    }
+    function enqueue(op) { if (queue.length < 4) { queue.push(op); pump(); } }
+    function next() { touched(); enqueue(mkNext(1)); }
+    function prev() { touched(); enqueue(mkPrev(-1)); }
     function goTo(k) {
-        if (busy || k === top || !interactive()) return;
         touched();
-        var fwd = (k - top + N) % N, back = N - fwd, dir = fwd <= back ? 1 : -1, steps = dir === 1 ? fwd : back;
-        (function run() {
-            if (steps <= 0) { announce(); return; }
-            steps--;
-            if (dir === 1) moveNext(-1, run); else movePrev(run);
-        })();
+        var p = order.indexOf(k) , before = queue.length; if (p <= 0 && !busy && !queue.length) return;
+        if (busy || queue.length) return;                             // let the current shuffle finish first
+        if (p <= N / 2) for (var i = 0; i < p; i++) enqueue(mkNext(i % 2 ? -1 : 1, true));
+        else for (var j = 0; j < N - p; j++) enqueue(mkPrev(j % 2 ? 1 : -1, true));
     }
 
-    // ---- swipe ----
-    function onDown(e) {
-        if (!interactive() || busy) return;
-        if (e.pointerType === 'mouse' && e.button !== 0) return;
-        var c = e.target.closest && e.target.closest('.pc');
-        if (!c || c !== cards[top]) return;
-        drag = { id: e.pointerId, x: e.clientX, y: e.clientY, lx: e.clientX, lt: performance.now(), v: 0, dx: 0, lock: null, c: c };
+    // ---- fit to content ----
+    function layout() {
+        var w = scene.clientWidth; if (!w) return;
+        W = w;
+        var h = 0;
+        cards.forEach(function (c) { c.style.bottom = 'auto'; h = Math.max(h, c.offsetHeight); c.style.bottom = ''; });
+        scene.style.height = '';
+        var min = parseFloat(getComputedStyle(scene).minHeight) || 0;
+        scene.style.height = Math.max(min, h + 4) + 'px';
     }
-    function onMove(e) {
+    var lastW = 0;
+    if (window.ResizeObserver) new ResizeObserver(function () { var w = scene.clientWidth; if (w && w !== lastW) { lastW = w; layout(); } }).observe(scene);
+    else window.addEventListener('resize', layout);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(layout);
+
+    // ---- drag the top card away; it flies off, then slips in at the back ----
+    scene.addEventListener('pointerdown', function (e) {
+        if (busy || queue.length || !entered) return;
+        if (e.pointerType === 'mouse' && e.button !== 0) return;
+        drag = { id: e.pointerId, x: e.clientX, y: e.clientY, lock: null, v: 0, lx: e.clientX, lt: performance.now(), dx: 0, c: order[0] };
+    });
+    scene.addEventListener('pointermove', function (e) {
         if (!drag || e.pointerId !== drag.id) return;
         var dx = e.clientX - drag.x, dy = e.clientY - drag.y;
         if (drag.lock === null) {
             if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return;
-            if (Math.abs(dy) > Math.abs(dx)) { drag = null; return; }   // vertical gesture: leave it to page scroll
-            drag.lock = 'x'; drag.c.classList.add('dragging'); touched();
-            try { deck.setPointerCapture(e.pointerId); } catch (err) {}
+            if (Math.abs(dy) > Math.abs(dx)) { drag = null; return; }
+            drag.lock = 'x'; touched(); scene.classList.add('grabbing');
+            S[drag.c].held = true; S[drag.c].z = N + 3;
+            try { scene.setPointerCapture(e.pointerId); } catch (err) {}
         }
-        var now = performance.now();
-        drag.v = (e.clientX - drag.lx) / Math.max(1, now - drag.lt); drag.lx = e.clientX; drag.lt = now;
-        drag.dx = dx;
-        drag.c.style.setProperty('--dx', dx + 'px');
-        drag.c.style.setProperty('--dr', Math.max(-16, Math.min(16, dx / 14)) + 'deg');
-    }
-    function release(e, cancelled) {
+        var now = performance.now(), s = S[drag.c];
+        drag.v = .6 * drag.v + .4 * ((e.clientX - drag.lx) / Math.max(1, now - drag.lt));
+        drag.lx = e.clientX; drag.lt = now; drag.dx = dx;
+        s.x = dx; s.y = -Math.min(Math.abs(dx) * .07, 18); s.r = Math.max(-18, Math.min(18, dx / 12)); s.vx = s.vy = s.vr = 0;
+        s.tx = s.x; s.ty = s.y; s.tr = s.r;
+        paint();
+    });
+    function release(e, cancel) {
         if (!drag || e.pointerId !== drag.id) return;
         var d = drag; drag = null;
-        try { deck.releasePointerCapture(e.pointerId); } catch (err) {}
+        try { scene.releasePointerCapture(e.pointerId); } catch (err) {}
+        scene.classList.remove('grabbing');
         if (d.lock !== 'x') return;
-        d.c.classList.remove('dragging');
-        var thr = Math.min(90, d.c.offsetWidth * 0.28);
-        if (!cancelled && (Math.abs(d.dx) > thr || (Math.abs(d.v) > 0.6 && Math.abs(d.dx) > 24))) flyAway(d.dx < 0 ? -1 : 1, announce);
-        else { d.c.style.removeProperty('--dx'); d.c.style.removeProperty('--dr'); }   // springs back
+        var s = S[d.c]; s.held = false;
+        var thr = Math.min(90, W * .22);
+        if (!cancel && (Math.abs(d.dx) > thr || (Math.abs(d.v) > .6 && Math.abs(d.dx) > 24))) {
+            var side = d.dx < 0 ? -1 : 1, g = gen;
+            busy = true;
+            aim(d.c, { x: side * W * .95, y: -40, r: side * 22 });
+            later(function () {
+                if (g !== gen) return;
+                order.push(order.shift()); sync();
+                order.forEach(function (ci, p) { S[ci].z = N - p + 1; });
+                fanOut(); S[d.c].z = 1;
+                later(function () { busy = false; pump(); }, 200);
+            }, 190);
+        } else { aim(d.c, slot(0)); later(function () { S[d.c].z = N; }, 250); }
     }
-    deck.addEventListener('pointerdown', onDown);
-    deck.addEventListener('pointermove', onMove);
-    deck.addEventListener('pointerup', function (e) { release(e, false); });
-    deck.addEventListener('pointercancel', function (e) { release(e, true); });
-    deck.addEventListener('dragstart', function (e) { if (on) e.preventDefault(); });
-    deck.addEventListener('keydown', function (e) {
-        if (!on) return;
-        if (e.key === 'ArrowRight') { e.preventDefault(); step(1); }
-        else if (e.key === 'ArrowLeft') { e.preventDefault(); step(-1); }
+    scene.addEventListener('pointerup', function (e) { release(e, false); });
+    scene.addEventListener('pointercancel', function (e) { release(e, true); });
+    scene.addEventListener('dragstart', function (e) { e.preventDefault(); });
+    scene.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowRight') { e.preventDefault(); next(); }
+        else if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
     });
+
+    // ---- controls: arrows, dots and the names on the left ----
     ui.addEventListener('click', function (e) {
         var b = e.target.closest('button'); if (!b) return;
-        if (b.dataset.deck === 'next') step(1);
-        else if (b.dataset.deck === 'prev') step(-1);
+        if (b.dataset.deck === 'next') next();
+        else if (b.dataset.deck === 'prev') prev();
         else if (b.dataset.i != null) goTo(parseInt(b.dataset.i, 10));
     });
+    listBtns.forEach(function (b) { b.addEventListener('click', function () { goTo(parseInt(b.dataset.i, 10)); }); });
 
-    // ---- the deal: plays when the deck scrolls into view, again after leaving the page and coming back ----
+    // ---- the shuffle: the pile is cut, riffled and fanned out each time the section scrolls into view ----
+    function pile() {
+        order.forEach(function (ci, p) { snap(ci, { x: 0, y: 26, r: [-7, 5, -2][p % 3], s: .9 }); S[ci].z = N - p; });
+        paint();
+    }
+    function entrance() {
+        if (entered) return; entered = true; scene.classList.add('shown');
+        if (rm.matches) { fanOut(); paint(); return; }
+        busy = true;
+        later(function () {
+            var g = gen, k = 0;
+            // riffle: the pile splits and the halves pass through each other, then the hand opens up
+            order.forEach(function (ci, p) { aim(ci, { x: (p % 2 ? 1 : -1) * 36, y: 8, r: (p % 2 ? 1 : -1) * 6, s: .96 }); });
+            later(function () {
+                if (g !== gen) return;
+                order.forEach(function (ci, p) { aim(ci, { x: (p % 2 ? -1 : 1) * 30, y: 14, r: (p % 2 ? -1 : 1) * 4, s: .96 }); });
+                later(function () {
+                    if (g !== gen) return;
+                    busy = false; fanOut();
+                    // one overhand pass (every card once, so the order ends where it began)
+                    for (var n = 0; n < N; n++) enqueue(mkPrev(n % 2 ? 1 : -1, true));
+                    pump();
+                }, 200);
+            }, 230);
+        }, 260);
+    }
+    function reset() {
+        if (!entered) return;
+        entered = false; gen++; timers.forEach(clearTimeout); timers = []; queue = []; busy = false;
+        if (raf) { cancelAnimationFrame(raf); raf = 0; }
+        order = cards.map(function (_, i) { return i; }); idx = -1; sync();
+        scene.classList.remove('shown'); pile();
+    }
     function whenReady(fn) {
-        if (document.documentElement.classList.contains('intro-on')) { later(function () { whenReady(fn); }, 250); return; }
+        if (document.documentElement.classList.contains('intro-on')) { setTimeout(function () { whenReady(fn); }, 250); return; }
         fn();
     }
-    function peek() {                                  // one small nudge so people know the card moves
-        var c = cards[top];
-        if (hinted || rm.matches || !interactive() || ui.classList.contains('used')) return;
-        hinted = true;
-        c.style.setProperty('--dx', '-22px'); c.style.setProperty('--dr', '-2.5deg');
-        later(function () { if (drag || busy || cards[top] !== c) return; c.style.setProperty('--dx', '12px'); c.style.setProperty('--dr', '1.5deg'); }, 380);
-        later(function () { if (drag || busy || cards[top] !== c) return; c.style.removeProperty('--dx'); c.style.removeProperty('--dr'); }, 700);
-    }
-    function deal() {
-        if (!on || deck.classList.contains('dealt')) return;
-        if (rm.matches) { deck.classList.add('dealt'); return; }
-        deck.classList.add('dealing');
-        requestAnimationFrame(function () { requestAnimationFrame(function () { deck.classList.add('dealt'); }); });
-        clearTimeout(dealTimer);
-        dealTimer = setTimeout(function () { deck.classList.remove('dealing'); peek(); }, 1500);
-    }
-    function undeal() { clearTimeout(dealTimer); deck.classList.remove('dealt', 'dealing'); }
-    function armDeal() {
-        if (io) { io.disconnect(); io = null; }
-        undeal();
-        if (!('IntersectionObserver' in window)) { deck.classList.add('dealt'); return; }
-        io = new IntersectionObserver(function (es) {
+    sync(); pile();
+    if ('IntersectionObserver' in window) {
+        new IntersectionObserver(function (es) {
             es.forEach(function (en) {
-                if (en.intersectionRatio >= 0.3) whenReady(deal);
-                else if (en.intersectionRatio === 0) undeal();
+                if (en.intersectionRatio >= .25) whenReady(entrance);
+                else if (en.intersectionRatio === 0) reset();
             });
-        }, { threshold: [0, 0.3] });
-        io.observe(deck);
-    }
-
-    // ---- switch on / off with the screen size ----
-    function activate() {
-        if (on) return; on = true; top = 0;
-        deck.classList.add('deck-on'); ui.classList.add('deck-on');
-        deck.setAttribute('role', 'group'); deck.setAttribute('aria-roledescription', 'carousel');
-        deck.setAttribute('aria-label', 'Management recommendations'); deck.tabIndex = 0;
-        cards.forEach(function (c) { c.setAttribute('role', 'group'); c.setAttribute('aria-roledescription', 'card'); });
-        render(); armDeal();
-    }
-    function deactivate() {
-        if (!on) return; on = false; busy = false; drag = null;
-        timers.forEach(clearTimeout); timers = []; clearTimeout(dealTimer);
-        if (io) { io.disconnect(); io = null; }
-        deck.classList.remove('deck-on', 'dealt', 'dealing'); ui.classList.remove('deck-on', 'used');
-        ['role', 'aria-roledescription', 'aria-label', 'tabindex'].forEach(function (a) { deck.removeAttribute(a); });
-        cards.forEach(function (c) {
-            c.classList.remove('flying', 'entering', 'dragging', 'no-t');
-            ['data-pos', 'aria-hidden', 'inert', 'role', 'aria-roledescription', 'aria-label'].forEach(function (a) { c.removeAttribute(a); });
-            c.style.removeProperty('--dx'); c.style.removeProperty('--dr');
-        });
-    }
-    function sync() { if (mq.matches) activate(); else deactivate(); }
-    if (mq.addEventListener) mq.addEventListener('change', sync); else if (mq.addListener) mq.addListener(sync);
-    listBtns.forEach(function (b) { b.addEventListener('click', function () { goTo(parseInt(b.dataset.i, 10)); }); });
-    sync();
+        }, { threshold: [0, .25] }).observe(scene);
+    } else { entered = true; scene.classList.add('shown'); fanOut(); paint(); }
 })();
 </script>
 </body>
