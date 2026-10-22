@@ -883,41 +883,65 @@ html[data-theme="dark"] .tm-btn:hover,html[data-theme="dark"] .tm-btn[aria-expan
     <section id="skills" data-page class="subpage py-20 px-6 border-t border-cardborder/60 overflow-hidden relative">
         <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16">
             <div class="reveal">
+                <span class="sk-eye">What I bring to the floor</span>
                 <h2 class="text-3xl sm:text-4xl font-poppins font-bold text-textmain mb-8">Core <span class="text-accent">Expertise</span></h2>
-                <div class="space-y-4">
-                    <div class="bg-lightcard border border-cardborder p-5 rounded-xl hover:border-accent transition-all duration-300 soft-shadow hover:-translate-y-1">
-                        <h3 class="text-lg font-poppins font-bold text-textmain mb-1"><i class="fas fa-headset text-accent mr-3"></i>Omnichannel Support</h3>
-                        <p class="text-sm text-textmuted">Chat, Email & Inbound Voice Support</p>
-                    </div>
-                    <div class="bg-lightcard border border-cardborder p-5 rounded-xl hover:border-accent transition-all duration-300 soft-shadow hover:-translate-y-1">
-                        <h3 class="text-lg font-poppins font-bold text-textmain mb-1"><i class="fas fa-clipboard-check text-accent mr-3"></i>Quality & Coaching</h3>
-                        <p class="text-sm text-textmuted">Case Auditing, SME Coaching, Team Huddles</p>
-                    </div>
-                    <div class="bg-lightcard border border-cardborder p-5 rounded-xl hover:border-accent transition-all duration-300 soft-shadow hover:-translate-y-1">
-                        <h3 class="text-lg font-poppins font-bold text-textmain mb-1"><i class="fas fa-truck-fast text-accent mr-3"></i>Logistics & Ticketing</h3>
-                        <p class="text-sm text-textmuted">On-Demand Order Tracking, Escalations & VIP Support</p>
-                    </div>
-                    <div class="bg-lightcard border border-cardborder p-5 rounded-xl hover:border-accent transition-all duration-300 soft-shadow hover:-translate-y-1">
-                        <h3 class="text-lg font-poppins font-bold text-textmain mb-1"><i class="fas fa-chart-line text-accent mr-3"></i>Operations</h3>
-                        <p class="text-sm text-textmuted">Attendance Tracking, Productivity Metrics, Process Knowledge</p>
-                    </div>
+                <div class="ex-list" id="exList">
+                    <article class="ex-row" style="--d:0">
+                        <span class="ex-n" aria-hidden="true">01</span>
+                        <div class="ex-body">
+                            <h3 class="font-poppins font-bold">Omnichannel Support</h3>
+                            <p class="ex-sub">Chat<b aria-hidden="true">·</b>Email<b aria-hidden="true">·</b>Inbound Voice Support</p>
+                        </div>
+                        <span class="ex-ico" aria-hidden="true"><i class="fas fa-headset"></i></span>
+                    </article>
+                    <article class="ex-row" style="--d:1">
+                        <span class="ex-n" aria-hidden="true">02</span>
+                        <div class="ex-body">
+                            <h3 class="font-poppins font-bold">Quality &amp; Coaching</h3>
+                            <p class="ex-sub">Case Auditing<b aria-hidden="true">·</b>SME Coaching<b aria-hidden="true">·</b>Team Huddles</p>
+                        </div>
+                        <span class="ex-ico" aria-hidden="true"><i class="fas fa-clipboard-check"></i></span>
+                    </article>
+                    <article class="ex-row" style="--d:2">
+                        <span class="ex-n" aria-hidden="true">03</span>
+                        <div class="ex-body">
+                            <h3 class="font-poppins font-bold">Logistics &amp; Ticketing</h3>
+                            <p class="ex-sub">On-Demand Order Tracking<b aria-hidden="true">·</b>Escalations<b aria-hidden="true">·</b>VIP Support</p>
+                        </div>
+                        <span class="ex-ico" aria-hidden="true"><i class="fas fa-truck-fast"></i></span>
+                    </article>
+                    <article class="ex-row" style="--d:3">
+                        <span class="ex-n" aria-hidden="true">04</span>
+                        <div class="ex-body">
+                            <h3 class="font-poppins font-bold">Operations</h3>
+                            <p class="ex-sub">Attendance Tracking<b aria-hidden="true">·</b>Productivity Metrics<b aria-hidden="true">·</b>Process Knowledge</p>
+                        </div>
+                        <span class="ex-ico" aria-hidden="true"><i class="fas fa-chart-line"></i></span>
+                    </article>
                 </div>
             </div>
             <div class="reveal delay-200">
+                <span class="sk-eye">What sets me apart</span>
                 <h2 class="text-3xl sm:text-4xl font-poppins font-bold text-textmain mb-8">Key <span class="text-accent">Strengths</span></h2>
-                <div class="space-y-4">
-                    <div class="bg-lightcard border border-cardborder p-6 rounded-xl border-l-4 border-l-accent soft-shadow hover:-translate-x-2 transition-transform duration-300">
-                        <h3 class="text-xl font-poppins font-bold text-textmain mb-2">Problem-Solving</h3>
-                        <p class="text-textmuted text-sm leading-relaxed">Quick to resolve complex customer issues in fast-paced setups.</p>
-                    </div>
-                    <div class="bg-lightcard border border-cardborder p-6 rounded-xl border-l-4 border-l-accent soft-shadow hover:-translate-x-2 transition-transform duration-300">
-                        <h3 class="text-xl font-poppins font-bold text-textmain mb-2">Clear Communication</h3>
-                        <p class="text-textmuted text-sm leading-relaxed">Effective, empathetic, and professional in every interaction.</p>
-                    </div>
-                    <div class="bg-lightcard border border-cardborder p-6 rounded-xl border-l-4 border-l-accent soft-shadow hover:-translate-x-2 transition-transform duration-300">
-                        <h3 class="text-xl font-poppins font-bold text-textmain mb-2">Adaptability</h3>
-                        <p class="text-textmuted text-sm leading-relaxed">Thrives in dynamic environments with minimal supervision.</p>
-                    </div>
+                <div class="st-arches" id="stArches">
+                    <article class="st-arch" style="--d:0">
+                        <span class="st-ico" aria-hidden="true"><i class="fas fa-puzzle-piece"></i></span>
+                        <h3>Problem-Solving</h3>
+                        <p>Quick to resolve complex customer issues in fast-paced setups.</p>
+                        <span class="st-roman" aria-hidden="true">I</span>
+                    </article>
+                    <article class="st-arch" style="--d:1">
+                        <span class="st-ico" aria-hidden="true"><i class="fas fa-comments"></i></span>
+                        <h3>Clear Communication</h3>
+                        <p>Effective, empathetic, and professional in every interaction.</p>
+                        <span class="st-roman" aria-hidden="true">II</span>
+                    </article>
+                    <article class="st-arch" style="--d:2">
+                        <span class="st-ico" aria-hidden="true"><i class="fas fa-shuffle"></i></span>
+                        <h3>Adaptability</h3>
+                        <p>Thrives in dynamic environments with minimal supervision.</p>
+                        <span class="st-roman" aria-hidden="true">III</span>
+                    </article>
                 </div>
             </div>
         </div>
@@ -2683,6 +2707,86 @@ html[data-theme="dark"]{--pc-face:#1a2540;--pc-edge:rgba(244,241,232,.26);--pc-i
             });
         }, { threshold: [0, .25] }).observe(scene);
     } else { entered = true; scene.classList.add('shown'); fanOut(); paint(); }
+})();
+</script>
+<style id="skills-css">
+/* ===== Skills: Core Expertise as an editorial index + Key Strengths as three arches ===== */
+#skills .sk-eye{display:block;margin-bottom:.7rem;font-size:.74rem;font-weight:600;letter-spacing:.3em;text-transform:uppercase;color:var(--accent)}
+#skills .reveal{filter:none!important}
+
+/* --- Core Expertise: numbered rows; a dark band sweeps across on hover --- */
+.ex-list{border-bottom:1px solid var(--line)}
+.ex-row{position:relative;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:1.2rem;padding:1.35rem 1.1rem;overflow:hidden;isolation:isolate;border-top:1px solid var(--line)}
+.ex-row::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(184,92,56,.14),rgba(184,92,56,.03) 75%,transparent);
+  box-shadow:inset 3px 0 0 var(--accent);transform:scaleX(0);transform-origin:left;transition:transform .6s cubic-bezier(.7,0,.2,1)}
+.ex-row:hover::before{transform:scaleX(1)}
+.ex-n{min-width:3rem;font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-weight:600;font-size:2.7rem;line-height:1;color:var(--accent);transition:transform .5s cubic-bezier(.2,1.4,.4,1)}
+.ex-body{min-width:0;transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.ex-row h3{margin:0;font-size:1.15rem;line-height:1.3;color:var(--ink);transition:color .35s .1s}
+.ex-sub{margin:.3rem 0 0;font-size:.86rem;line-height:1.5;color:var(--muted);transition:color .35s .1s}
+.ex-sub b{margin:0 .45rem;font-weight:700;color:var(--accent)}
+.ex-ico{width:2.8rem;height:2.8rem;display:grid;place-items:center;border-radius:50%;border:1px solid var(--line);color:var(--accent);
+  transition:background .4s,border-color .4s,color .4s,transform .5s cubic-bezier(.2,1.4,.4,1)}
+.ex-row:hover .ex-n{transform:translateX(6px) scale(1.08)}
+.ex-row:hover .ex-body{transform:translateX(8px)}
+.ex-row:hover h3{color:var(--accent)}
+.ex-row:hover .ex-ico{background:var(--accent);border-color:var(--accent);color:#fff;transform:rotate(-12deg) scale(1.08)}
+.sk-js .ex-list:not(.in) .ex-row{opacity:0}
+.ex-list.in .ex-row{animation:exIn .75s cubic-bezier(.2,.8,.2,1) calc(var(--d,0) * .11s) backwards}
+@keyframes exIn{from{opacity:0;transform:translateX(-34px)}to{opacity:1;transform:none}}
+@media(max-width:639px){.ex-row{gap:.9rem;padding:1.15rem .6rem}.ex-n{min-width:2.3rem;font-size:2.2rem}.ex-ico{width:2.4rem;height:2.4rem;font-size:.85rem}}
+
+/* --- Key Strengths: arch-topped panels that fill with terracotta from the bottom --- */
+.st-arches{display:grid;grid-template-columns:1fr;gap:1rem}
+@media(min-width:640px){.st-arches{grid-template-columns:repeat(3,minmax(0,1fr));gap:.9rem;align-items:start}.st-arch:nth-child(odd){margin-top:2.2rem}}
+.st-arch{position:relative;overflow:hidden;isolation:isolate;display:flex;flex-direction:column;align-items:center;text-align:center;min-height:21rem;padding:2.8rem .85rem 1.5rem;
+  border-radius:999px 999px 1.3rem 1.3rem;border:1px solid var(--line);background:var(--panel);outline:1px solid var(--line);outline-offset:-.55rem;
+  transition:transform .55s cubic-bezier(.2,.8,.2,1),box-shadow .55s,outline-color .4s}
+.st-arch::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,var(--accent2),var(--accent) 55%,#9c4628);transform:translateY(101%);transition:transform .65s cubic-bezier(.7,0,.2,1)}
+.st-arch::after{content:"✦";position:absolute;top:1.15rem;left:50%;translate:-50% 0;font-size:.8rem;line-height:1;color:var(--accent2);opacity:.7;transition:color .4s,scale .5s}
+.st-arch:hover{transform:translateY(-8px);box-shadow:0 30px 50px -28px rgba(184,92,56,.75);outline-color:rgba(255,255,255,.4)}
+.st-arch:hover::before{transform:none}
+.st-arch:hover::after{color:#fff;scale:1.6;opacity:1}
+.st-ico{width:3.4rem;height:3.4rem;display:grid;place-items:center;margin:.4rem 0 1.3rem;border-radius:50%;font-size:1.15rem;color:var(--accent);background:rgba(184,92,56,.1);transition:background .4s,color .4s}
+.st-arch{container-type:inline-size}
+/* title scales with the arch width so long words ("Communication") never get split */
+.st-arch h3{margin:0 0 .75rem;font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-weight:600;font-size:1.4rem;font-size:clamp(1.15rem,12.5cqi,1.75rem);line-height:1.05;
+  overflow-wrap:normal;word-break:normal;hyphens:manual;color:var(--ink);transition:color .35s .1s}
+.st-arch p{margin:0;font-size:.86rem;line-height:1.6;color:var(--muted);transition:color .35s .1s}
+.st-roman{display:flex;align-items:center;gap:.6rem;margin-top:auto;padding-top:1.3rem;font-family:'Cormorant Garamond',Georgia,serif;font-size:1rem;font-weight:600;letter-spacing:.2em;color:var(--accent);transition:color .35s .1s}
+.st-roman::before,.st-roman::after{content:"";width:1.3rem;height:1px;background:currentColor;opacity:.5}
+.st-arch:hover .st-ico{background:rgba(255,255,255,.2);color:#fff}
+.st-arch:hover h3,.st-arch:hover p,.st-arch:hover .st-roman{color:#fff}
+.sk-js .st-arches:not(.in) .st-arch{opacity:0}
+.st-arches.in .st-arch{animation:stIn .9s cubic-bezier(.2,1,.3,1) calc(var(--d,0) * .14s) backwards}
+@keyframes stIn{from{opacity:0;transform:translateY(46px)}to{opacity:1;transform:none}}
+@media(max-width:639px){.st-arch{min-height:0;padding:2.6rem 1.4rem 1.4rem;border-radius:9rem 9rem 1.2rem 1.2rem}}
+
+@media(prefers-reduced-motion:reduce){
+  .ex-list.in .ex-row,.st-arches.in .st-arch{animation:none}
+}
+</style>
+<script>
+// ===== Skills: rows and arches rise in each time they scroll into view =====
+(function () {
+    try {
+        var sec = document.getElementById('skills'), els = [document.getElementById('exList'), document.getElementById('stArches')];
+        if (!sec || !els[0] || !els[1]) return;
+        if (!('IntersectionObserver' in window)) return;
+        sec.classList.add('sk-js');
+        function whenReady(fn) {
+            if (document.documentElement.classList.contains('intro-on')) { setTimeout(function () { whenReady(fn); }, 250); return; }
+            fn();
+        }
+        var io = new IntersectionObserver(function (es) {
+            es.forEach(function (en) {
+                var el = en.target;
+                if (en.intersectionRatio >= .2) whenReady(function () { el.classList.add('in'); });
+                else if (en.intersectionRatio === 0) el.classList.remove('in');
+            });
+        }, { threshold: [0, .2] });
+        els.forEach(function (el) { io.observe(el); });
+    } catch (err) {}
 })();
 </script>
 <script>
