@@ -2111,19 +2111,20 @@ html[data-theme="dark"] .tm-btn:hover,html[data-theme="dark"] .tm-btn[aria-expan
 @media(min-width:1024px){
   #toolsAll.tt-on .tm-all-inner{grid-template-columns:18rem minmax(0,1fr);column-gap:2.6rem}
 }
-/* phones: an accordion - every category is a row, and the chosen one opens its tools right underneath */
+/* phones: a slim icon rail on the left; the chosen category's name and tools show on the right */
 @media(max-width:767px){
-  #toolsAll.tt-on .tm-all-inner{display:flex;flex-direction:column;gap:.55rem}
-  .tt-bar{display:contents}
-  .tt-bar::before,.tt-glide{display:none}
-  .tt-tab{order:var(--o,0);padding:.7rem .95rem .7rem .7rem;border:1px solid var(--line);border-radius:1rem;background:var(--panel);font-size:.9rem;transition:color .3s,border-color .3s,box-shadow .3s}
-  .tt-tab:hover{background:var(--panel)}
-  .tt-tab[aria-selected="true"]{background:var(--panel);border-color:rgba(184,92,56,.55);box-shadow:inset 3px 0 0 var(--accent),0 14px 28px -20px rgba(184,92,56,.7)}
-  .tt-tab::after{content:"";flex:none;width:.5rem;height:.5rem;margin:0 .15rem 0 .1rem;border-right:2px solid currentColor;border-bottom:2px solid currentColor;
-    opacity:.45;transform:translateY(-2px) rotate(45deg);transition:transform .4s cubic-bezier(.2,1.3,.4,1),opacity .3s,color .3s}
-  .tt-tab[aria-selected="true"]::after{color:var(--accent);opacity:1;transform:translateY(2px) rotate(225deg)}
-  #toolsAll.tt-on .tt-panel{order:var(--o,0);margin:.1rem 0 .5rem 1.05rem;padding:.35rem 0 .2rem 1rem;border-left:2px solid rgba(184,92,56,.35)}
-  #toolsAll.tt-on .tt-panel>h3{position:absolute;width:1px;height:1px;margin:0;padding:0;border:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  #toolsAll.tt-on .tm-all-inner{display:grid;grid-template-columns:3.3rem minmax(0,1fr);column-gap:.9rem;align-items:start}
+  .tt-bar{gap:.3rem;padding:.35rem;border-radius:1.1rem}
+  .tt-bar::before{display:none}
+  .tt-tab{justify-content:center;gap:0;padding:.3rem;border-radius:.75rem}
+  .tt-tab>span{display:none}
+  .tt-tab>i{width:2.3rem;height:2.3rem;font-size:.9rem;border-radius:.7rem}
+  .tt-tab:hover>i{transform:none}
+  .tt-tab>b{position:absolute;top:.05rem;right:.05rem;min-width:1rem;height:1rem;padding:0 .2rem;display:grid;place-items:center;border-radius:999px;
+    font-family:'Jost',system-ui,sans-serif;font-style:normal;font-size:.6rem;font-weight:700;line-height:1;opacity:1;color:#fff;background:var(--muted)}
+  .tt-tab[aria-selected="true"]>b{color:#fff;background:var(--ink)}
+  html[data-theme="dark"] .tt-tab>b,html[data-theme="dark"] .tt-tab[aria-selected="true"]>b{color:#0f172a}
+  #toolsAll.tt-on .tt-panel>h3{flex-wrap:wrap;gap:.2rem .8rem;margin-bottom:.9rem;padding-bottom:.6rem;font-size:1.4rem}
   #toolsAll.tt-on .tt-panel>.space-y-4{grid-template-columns:1fr;gap:.6rem}
 }
 @media(prefers-reduced-motion:reduce){.tt-glide{transition:none}.tt-panel.tt-in>.space-y-4>*,.tt-panel.tt-in>h3{animation:none}}
@@ -2148,7 +2149,7 @@ html[data-theme="dark"] .tm-btn:hover,html[data-theme="dark"] .tm-btn[aria-expan
         const count = list ? list.children.length : 0;
         const n = document.createElement('b'); n.textContent = count; n.setAttribute('aria-hidden', 'true'); b.appendChild(n);
         h.dataset.count = count + (count === 1 ? ' tool' : ' tools');
-        b.style.setProperty('--o', 2 * k); g.style.setProperty('--o', 2 * k + 1);        // accordion order on phones
+        b.setAttribute('aria-label', s.textContent); b.title = s.textContent;           // phones show only the icon
         g.id = 'ttPanel' + k; g.classList.add('tt-panel'); g.setAttribute('role', 'tabpanel'); g.setAttribute('aria-labelledby', b.id);
         if (list) Array.from(list.children).forEach((c, i) => c.style.setProperty('--i', i));
         bar.appendChild(b); return b;
@@ -2163,17 +2164,14 @@ html[data-theme="dark"] .tm-btn:hover,html[data-theme="dark"] .tm-btn[aria-expan
         glide.style.top = b.offsetTop + 'px'; glide.style.transform = 'translateX(' + b.offsetLeft + 'px)';
     }
     function edge() { bar.classList.toggle('at-end', bar.scrollLeft + bar.clientWidth >= bar.scrollWidth - 4); }
-    const phone = window.matchMedia('(max-width: 767px)');
     function select(k, focus) {
         if (k === cur) return;
-        const b = tabs[k], first = cur < 0, top = b.getBoundingClientRect().top;
+        const b = tabs[k];
         cur = k;
         tabs.forEach((t, i) => { const on = i === k; t.setAttribute('aria-selected', on); t.tabIndex = on ? 0 : -1; });
         groups.forEach((g, i) => { g.hidden = i !== k; });
         const g = groups[k]; g.classList.remove('tt-in'); void g.offsetWidth; g.classList.add('tt-in');
         place();
-        // accordion: the panel above may have closed, so keep the tapped row where the finger is
-        if (phone.matches && !first) { const d = b.getBoundingClientRect().top - top; if (Math.abs(d) > 1) window.scrollBy({ top: d, behavior: 'instant' }); }
         if (bar.scrollWidth > bar.clientWidth) bar.scrollTo({ left: b.offsetLeft - (bar.clientWidth - b.offsetWidth) / 2, behavior: 'smooth' });
         if (focus) b.focus({ preventScroll: true });
     }
