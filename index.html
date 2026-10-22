@@ -214,6 +214,9 @@
         html, body { max-width: 100%; overflow-x: hidden; }
         @supports (overflow: clip) { html, body { overflow-x: clip; } }
         html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+        /* the page's own ground colour, so the strip that shows while the phone's address bar slides away is never the browser's black */
+        html { background:#f4f1e8; color-scheme:light; }
+        html[data-theme="dark"] { background:#0f1520; }
         img, svg { max-width: 100%; }
         h1, h2, h3, p { overflow-wrap: anywhere; }
         #home { min-height: 100vh; min-height: 100svh; overflow-x: hidden; }
@@ -1733,7 +1736,12 @@ html[data-theme="dark"] .tm-btn:hover,html[data-theme="dark"] .tm-btn[aria-expan
 // ===== light / dark toggle (remembers the choice) =====
 (function () {
     const root = document.documentElement, btn = document.getElementById('themeBtn');
-    function label() { btn.setAttribute('aria-label', root.getAttribute('data-theme') === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'); }
+    const bar = document.querySelector('meta[name="theme-color"]');
+    function label() {
+        const dark = root.getAttribute('data-theme') === 'dark';
+        btn.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
+        if (bar) bar.setAttribute('content', dark ? '#0f1520' : '#f4f1e8');   // browser address bar follows the theme
+    }
     label();
     btn.addEventListener('click', function () {
         const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
