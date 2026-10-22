@@ -2328,11 +2328,22 @@ html[data-theme="dark"]{--pc-face:#1a2540;--pc-edge:rgba(244,241,232,.26);--pc-i
 #recDeckUi.used .deck-hint{opacity:0}
 
 @media (max-width:767px){
-  .pr-scene{min-height:31rem}
-  #recDeck.deck-on .pr-stage>.pc{padding:2.6rem 1.5rem 2.3rem!important}
-  #recDeck.deck-on .pr-stage>.pc>h3{font-size:1.6rem}
-  #recDeck.deck-on .pr-stage>.pc>p{font-size:.92rem;line-height:1.6}
+  #recDeck.deck-on{padding:.6rem 0 2.2rem}
+  /* the tilted back cards stick out on the left, so the whole fan (not just the front card) is what gets centred */
+  .pr-scene{width:calc(100% - 3rem);left:calc((100% - 3rem) * .095);min-height:0}
+  #recDeck.deck-on .pr-stage>.pc{padding:1.7rem 1.25rem 1.4rem!important;border-radius:1.1rem!important;outline-offset:-.45rem}
+  #recDeck.deck-on .pr-stage>.pc>h3{font-size:1.4rem;line-height:1.12;margin-bottom:.7rem}
+  #recDeck.deck-on .pr-stage>.pc>p{font-size:.84rem;line-height:1.5;margin-bottom:.9rem}
+  #recDeck.deck-on .pr-stage>.pc>div{padding-top:.65rem}
+  #recDeck.deck-on .pr-stage>.pc>div>div:first-child{font-size:.95rem}
+  #recDeck.deck-on .pr-stage>.pc>div>div+div{font-size:.72rem}
 }
+@media (max-width:767px) and (max-height:700px){
+  #recDeck.deck-on .pr-stage>.pc{padding:1.4rem 1.1rem 1.2rem!important}
+  #recDeck.deck-on .pr-stage>.pc>h3{font-size:1.25rem}
+  #recDeck.deck-on .pr-stage>.pc>p{font-size:.79rem;line-height:1.45}
+}
+
 @media (prefers-reduced-motion:reduce){
   #recDeck.deck-on .pr-stage>.pc>h3,#recDeck.deck-on .pr-stage>.pc>p,#recDeck.deck-on .pr-stage>.pc>div{transform:none;transition:opacity .3s}
   .pr-sheen{display:none}
