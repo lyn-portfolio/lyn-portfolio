@@ -404,7 +404,7 @@ html.intro-on .reveal,html.intro-on .reveal.active{opacity:0 !important;transfor
 #intro .intro-greet{transition:opacity .5s ease}
 #intro.p-welcome .intro-greet{opacity:0}
 #intro .g{position:absolute;white-space:nowrap;font-family:'Great Vibes',cursive;font-size:clamp(3rem,15vw,4.7rem);line-height:1.1;color:var(--i-accent);
-  opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
+  opacity:0;transform:translateY(16px);transition:opacity .42s ease,transform .55s cubic-bezier(.2,.7,.2,1)}
 #intro .g.show{opacity:1;transform:none}
 #intro .g.out{opacity:0;transform:translateY(-16px)}
 
@@ -661,7 +661,7 @@ html[data-theme="dark"] .tm-btn:hover,html[data-theme="dark"] .tm-btn[aria-expan
     var fill = document.getElementById('introFill'), pctEl = document.getElementById('introPct'), skip = document.getElementById('introSkip');
     var greets = el.querySelectorAll('.g');
     var t0 = performance.now(), seqStart = null, p = 0, lastPct = -1, done = false, ready = document.readyState === 'complete';
-    var TARGET = reduced ? 3200 : 4800;               // <<< INTRO LENGTH: ms from page open until the curtain starts to open
+    var TARGET = reduced ? 3200 : 4300;               // <<< INTRO LENGTH: ms from page open until the curtain starts to open
     var SEQ = 3000;                                    // (worked out in begin() from TARGET)
     window.addEventListener('load', function () { ready = true; });
 
@@ -698,7 +698,7 @@ html[data-theme="dark"] .tm-btn:hover,html[data-theme="dark"] .tm-btn[aria-expan
     function begin() {
         if (done) return;
         seqStart = performance.now();
-        SEQ = Math.max(TARGET - (seqStart - t0), reduced ? 2400 : 4200) - 300;   // fonts loading late never shortens the welcome
+        SEQ = Math.max(TARGET - (seqStart - t0), reduced ? 2400 : 3700) - 300;   // fonts loading late never shortens the welcome
         el.classList.add('is-live');
         if (reduced) {                                                    // calm version: straight to the welcome text
             el.classList.add('p-welcome');
@@ -712,8 +712,8 @@ html[data-theme="dark"] .tm-btn:hover,html[data-theme="dark"] .tm-btn[aria-expan
             i++;
             if (i >= greets.length) { clearInterval(iv); return; }
             show(i);
-        }, 700);                                                      // each greeting stays ~0.7s
-        if (!reduced) setTimeout(function () { if (!done) el.classList.add('p-welcome'); }, 2950);
+        }, 570);                                                      // each greeting stays ~0.57s
+        if (!reduced) setTimeout(function () { if (!done) el.classList.add('p-welcome'); }, 2400);
         setTimeout(function wait() {
             if (done) return;
             if (ready || performance.now() - t0 > 9000) finish(); else setTimeout(wait, 120);
@@ -1978,10 +1978,6 @@ document.addEventListener('pointermove', function (e) {
 </script>
 <!-- ===== EXTRA MOTION: sparkle trail, click burst, magnetic buttons, blob parallax ===== -->
 <style id="fx-css">
-.fx-s{position:fixed;left:0;top:0;z-index:9990;pointer-events:none;line-height:1;color:var(--accent);will-change:transform,opacity;
-  animation:fxFloat var(--d,900ms) cubic-bezier(.2,.7,.3,1) forwards}
-@keyframes fxFloat{0%{opacity:.9;transform:translate(var(--x),var(--y)) scale(.4) rotate(0)}
-  100%{opacity:0;transform:translate(calc(var(--x) + var(--dx)),calc(var(--y) + var(--dy))) scale(1.1) rotate(var(--r))}}
 .fx-ring{position:fixed;left:0;top:0;width:34px;height:34px;margin:-17px 0 0 -17px;border:1.5px solid var(--accent);border-radius:50%;
   z-index:9989;pointer-events:none;opacity:0;transition:opacity .3s,width .25s,height .25s,margin .25s,background .25s}
 .fx-ring.on{opacity:.55}
@@ -2015,24 +2011,15 @@ document.addEventListener('pointermove', function (e) {
     var d=document.documentElement;
     
     var glyphs=['✦','✧','✦','·'],last=0,mx=-99,my=-99,rx=-99,ry=-99;
-    addEventListener('touchmove',function(e){var t=e.touches[0];if(t&&performance.now()-last>60){last=performance.now();spark(t.clientX,t.clientY,40,10+Math.random()*8)}},{passive:true});
 
-    function spark(x,y,spread,size){
-      var s=document.createElement('i');s.className='fx-s';s.textContent=glyphs[Math.random()*glyphs.length|0];
-      s.style.cssText='--x:'+(x-6)+'px;--y:'+(y-6)+'px;--dx:'+((Math.random()-.5)*spread)+'px;--dy:'+(Math.random()*spread*.8+10)+'px;--r:'+((Math.random()-.5)*160)+'deg;--d:'+(700+Math.random()*500)+'ms;font-size:'+size+'px;color:'+(Math.random()<.45?'var(--accent2)':'var(--accent)');
-      document.body.appendChild(s);setTimeout(function(){s.remove()},1300);
-    }
     addEventListener('mousemove',function(e){
       mx=e.clientX;my=e.clientY;
-      var n=performance.now();if(n-last>55&&!d.classList.contains('intro-on')){last=n;spark(mx,my,46,9+Math.random()*8)}
       // blobs drift gently against the cursor
       var px=(e.clientX/innerWidth-.5),py=(e.clientY/innerHeight-.5);
-      document.querySelectorAll('.animate-blob').forEach(function(b,i){var k=(i+1)*14;b.style.setProperty('--px',(-px*k)+'px');b.style.setProperty('--py',(-py*k)+'px')});
+      document.querySelectorAll('.animate-blob').forEach(function(b,i){var k=(i+1)*4;b.style.setProperty('--px',(-px*k)+'px');b.style.setProperty('--py',(-py*k)+'px')});
     },{passive:true});
         (function loop(){requestAnimationFrame(loop)})();
 
-    // click burst
-    addEventListener('click',function(e){for(var i=0;i<9;i++)spark(e.clientX,e.clientY,120,10+Math.random()*10)});
 
     // magnetic buttons
     var mags='.btn-primary,.btn-secondary,.hire-btn,.back-home';
@@ -2069,9 +2056,11 @@ h2.text-3xl .text-accent{background:linear-gradient(100deg,var(--accent) 35%,#f0
   try{
     var box=document.createElement('div');box.className='fx-drift';box.setAttribute('aria-hidden','true');
     var g=['✦','✧','✦','·','✦'];
-    for(var i=0;i<16;i++){
+    var cols=innerWidth<700?3:4,rows=innerWidth<700?2:3;
+    for(var i=0;i<cols*rows;i++){
       var s=document.createElement('i');s.textContent=g[i%g.length];
-      s.style.cssText='left:'+(2+Math.random()*94)+'%;top:'+(4+Math.random()*90)+'%;font-size:'+(10+Math.random()*16)+'px;--t:'+(9+Math.random()*9)+'s;--g:'+(3+Math.random()*3.5)+'s;--w:-'+(Math.random()*10)+'s;--sx:'+(8+Math.random()*16)+'px;--sy:'+(8+Math.random()*14)+'px';
+      var cx=i%cols,cy=(i/cols)|0;
+      s.style.cssText='left:'+((cx+.15+Math.random()*.7)/cols*100)+'%;top:'+((cy+.15+Math.random()*.7)/rows*100)+'%;font-size:'+(8+Math.random()*8)+'px;--g:'+(5+Math.random()*4)+'s;--w:-'+(Math.random()*8)+'s';
       box.appendChild(s);
     }
     document.body.appendChild(box);
@@ -2173,7 +2162,7 @@ html[data-theme="dark"] .jt-node{background:#0f172a}
 .h2-wrap{position:relative;flex:none;animation:orbBob 6s ease-in-out infinite;perspective:600px}
 @keyframes orbBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
 .h2-wrap .h2-photo{transition:transform .25s ease-out,box-shadow .4s;transform:rotateX(var(--tx,0deg)) rotateY(var(--ty,0deg)) scale(var(--sc,1))}
-.h2-wrap:hover .h2-photo{--sc:1.04;box-shadow:0 0 0 8px rgba(184,92,56,.14),0 20px 50px -14px rgba(184,92,56,.7)}
+.h2-wrap:hover .h2-photo{--sc:1.03;box-shadow:0 0 0 6px rgba(184,92,56,.12),0 16px 40px -14px rgba(184,92,56,.55)}
 .orb{position:absolute;inset:-14px;pointer-events:none;border-radius:50%}
 .orb::before,.orb::after{content:"";position:absolute;inset:12px;border-radius:50%;border:1.5px solid var(--accent);opacity:0;animation:orbPulse 3.6s ease-out infinite}
 .orb::after{animation-delay:1.8s}
@@ -2200,11 +2189,56 @@ html[data-theme="dark"] .jt-node{background:#0f172a}
     wrap.appendChild(o);
     wrap.addEventListener('mousemove',function(e){
       var r=wrap.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
-      ph.style.setProperty('--ty',(x*16)+'deg');ph.style.setProperty('--tx',(-y*16)+'deg');
+      ph.style.setProperty('--ty',(x*10)+'deg');ph.style.setProperty('--tx',(-y*10)+'deg');
     });
     wrap.addEventListener('mouseleave',function(){ph.style.setProperty('--ty','0deg');ph.style.setProperty('--tx','0deg')});
   }catch(err){}
 })();
 </script>
+
+<!-- ===== CALM MODE: subtler background + photo motion, lighter on the GPU ===== -->
+<style id="calm-css">
+/* background blobs: much smaller, slower drift; no blend mode / backdrop blur re-computation per frame */
+@keyframes blobCalm { to { transform: translate(22px,-18px) scale(1.04); } }
+#bgDeco > div.animate-blob { animation-name: blobCalm !important; animation-duration: 34s !important; animation-timing-function: ease-in-out !important;
+    animation-direction: alternate !important; mix-blend-mode: normal !important; }
+html[data-theme="dark"] #bgDeco > div.animate-blob { opacity: .22; }
+#bgDeco::after { opacity: .6; animation-duration: 140s; }
+.bg-star:nth-of-type(n+7) { display: none; }
+/* drifting sparkles: fade + gentle float only (no animated text-shadow) */
+.fx-drift i { opacity: .2; }
+@keyframes fxGlow { 0%,100% { opacity: .12; scale: .85; } 50% { opacity: .5; scale: 1.1; } }
+/* cards: no pulsing box-shadow and no glass blur over a moving background */
+.soft-shadow { animation: none !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
+/* profile photo: static gradient ring + a very gentle breathing */
+.h2-photo { animation: none !important; --ang: 35deg; }
+@keyframes photoBreathe { 0%,100% { transform: scale(1); } 50% { transform: scale(1.018); } }
+.h2-chip { animation-duration: 7s; }
+@keyframes fxBob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-2px); } }
+@media (prefers-reduced-motion: reduce) { #bgDeco > div.animate-blob { animation: none !important; } }
+/* ===== profile photo: gentle but visible ===== */
+.h2-wrap { animation-name: orbBobCalm; animation-duration: 7s; }
+@keyframes orbBobCalm { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+/* one soft ring that slowly expands and fades */
+.orb::before { animation-duration: 5.5s; }
+.orb::after { display: none; }
+@keyframes orbPulse { 0% { transform: scale(.95); opacity: .38; } 100% { transform: scale(1.14); opacity: 0; } }
+/* orbit rings: slow, clearly turning */
+.orb-ring { animation-duration: 38s; }
+.orb-ring.r2 { animation-duration: 28s; }
+/* sparkles: all kept, softer glow, gentle twinkle */
+.orb-ring i { text-shadow: 0 0 6px rgba(240,183,157,.7); animation-duration: 4.2s; }
+@keyframes orbTw { 0%,100% { opacity: .45; scale: .88; } 50% { opacity: .95; scale: 1.18; } }
+</style>
+<style id="stars-css">
+/* background stars: few, still, soft twinkle only */
+.fx-drift i{position:absolute;font-style:normal;line-height:1;color:var(--accent2);opacity:.1;
+  text-shadow:0 0 5px rgba(240,183,157,.55);
+  animation:starTw var(--g,6s) ease-in-out var(--w,0s) infinite}
+@keyframes starTw{0%,100%{opacity:.1;scale:.92}50%{opacity:.5;scale:1.04}}
+html[data-theme="dark"] .fx-drift i{color:#f6e3d4;text-shadow:0 0 5px rgba(255,236,220,.5)}
+.bg-star{display:none !important}
+@media (prefers-reduced-motion:reduce){.fx-drift i{animation:none;opacity:.35}}
+</style>
 </body>
 </html>
