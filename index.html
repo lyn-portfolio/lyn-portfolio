@@ -876,40 +876,42 @@ html[data-theme="dark"] .tm-btn:hover,html[data-theme="dark"] .tm-btn[aria-expan
 
     <!-- Work Experience Section -->
     <section id="experience" data-page class="subpage py-20 px-6 border-t border-cardborder/60 overflow-hidden relative">
-        <div class="max-w-7xl mx-auto">
-            <h2 class="text-3xl sm:text-4xl font-poppins font-bold text-textmain mb-12 reveal">Work <span class="text-accent">Experience</span></h2>
-            <div class="space-y-8">
-                
-                <div class="bg-lightcard border border-cardborder p-8 rounded-2xl border-l-4 border-l-accent soft-shadow reveal delay-100 hover:shadow-xl transition-shadow duration-300">
-                    <div class="flex flex-wrap justify-between items-start mb-6">
-                        <div>
-                            <h3 class="text-2xl font-poppins font-bold text-textmain">Leading BPO & CX Operations</h3>
-                        </div>
-                        <span class="text-sm bg-white/60 border border-cardborder text-textmain font-semibold px-4 py-1.5 rounded-full mt-2 sm:mt-0 shadow-sm backdrop-blur-md">2018 – Present</span>
-                    </div>
-                    <ul class="list-disc list-inside space-y-3 text-textmuted leading-relaxed">
+        <div class="max-w-7xl mx-auto jt">
+            <div class="jt-head reveal">
+                <span class="jt-eye">My path so far</span>
+                <h2 class="text-3xl sm:text-4xl font-poppins font-bold text-textmain">Work <span class="text-accent">Experience</span></h2>
+                <p class="jt-sub">The roles that shaped how I lead, support, and improve teams.</p>
+            </div>
+            <div class="jt-list" id="jtList">
+                <div class="jt-line" aria-hidden="true"><i class="jt-fill"></i></div>
+
+                <article class="jt-item">
+                    <span class="jt-node" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="3" y="14" width="4" height="6" rx="1.5"/><rect x="17" y="14" width="4" height="6" rx="1.5"/><path d="M19 20c0 1.5-2 2-5 2"/></svg></span>
+                    <div class="jt-card soft-shadow">
+                        <span class="jt-date">2018 – Present</span>
+                        <h3 class="text-2xl font-poppins font-bold text-textmain">Leading BPO &amp; CX Operations</h3>
+                        <ul class="jt-ul list-disc list-inside space-y-3 text-textmuted leading-relaxed">
                         <li><strong class="text-textmain">Leadership & Coaching:</strong> Served as Subject Matter Expert (SME) and Team POC—leading daily huddles, coaching nesters, and guiding teams on process updates.</li>
                         <li><strong class="text-textmain">Quality & Auditing:</strong> Audited live support cases to drive team accuracy, adherence, and high quality performance.</li>
                         <li><strong class="text-textmain">Logistics & VIP Support:</strong> Resolved real-time chat and voice escalations for VIP delivery partners and complex order logistics.</li>
                         <li><strong class="text-textmain">Omnichannel CX:</strong> Handled high-volume chat, email, and call contacts for delivery logistics, medical delivery, and event ticketing accounts.</li>
                         <li><strong class="text-textmain">Operations Support:</strong> Monitored daily attendance, tracked team productivity metrics, and ensured task accuracy.</li>
                     </ul>
-                </div>
-
-                <div class="bg-lightcard border border-cardborder p-8 rounded-2xl border-l-4 border-l-textmuted soft-shadow reveal delay-200 hover:shadow-xl transition-shadow duration-300">
-                    <div class="flex flex-wrap justify-between items-start mb-6">
-                        <div>
-                            <h3 class="text-2xl font-poppins font-bold text-textmain">Production Line Leader & Assistant Coordinator</h3>
-                            <p class="text-accent font-medium mt-1">Manufacturing Sector</p>
-                        </div>
-                        <span class="text-sm bg-white/60 border border-cardborder text-textmain font-semibold px-4 py-1.5 rounded-full mt-2 sm:mt-0 shadow-sm backdrop-blur-md">2015 – 2018</span>
                     </div>
-                    <ul class="list-disc list-inside space-y-3 text-textmuted leading-relaxed">
+                </article>
+
+                <article class="jt-item">
+                    <span class="jt-node" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21V11l6 4v-4l6 4V5h4v16z"/><path d="M8 21v-3M13 21v-3"/></svg></span>
+                    <div class="jt-card soft-shadow">
+                        <span class="jt-date">2015 – 2018</span>
+                        <h3 class="text-2xl font-poppins font-bold text-textmain">Production Line Leader &amp; Assistant Coordinator</h3>
+                        <p class="text-accent font-medium mt-1">Manufacturing Sector</p>
+                        <ul class="jt-ul list-disc list-inside space-y-3 text-textmuted leading-relaxed">
                         <li><strong class="text-textmain">Team Leadership:</strong> Led daily team briefings on production targets and quality standards.</li>
                         <li><strong class="text-textmain">Process Management:</strong> Monitored workflow efficiency to ensure daily output targets were consistently met.</li>
                     </ul>
-                </div>
-
+                    </div>
+                </article>
             </div>
         </div>
         <div class="back-home-wrap"><a href="#home" class="back-home"><span aria-hidden="true">←</span> Back to Home</a></div>
@@ -1604,6 +1606,23 @@ html[data-theme="dark"] .tm-btn:hover,html[data-theme="dark"] .tm-btn[aria-expan
     const f = document.getElementById('contactForm'); if (!f) return;
     const st = document.getElementById('formStatus'), el = f.elements, btn = f.querySelector('.c-send');
     const to = f.dataset.email, wa = f.dataset.wa, enc = encodeURIComponent;
+    // pop-up message (replaces the plain red status line)
+    function popup(type, title, html) {
+        const old = document.querySelector('.cf-pop'); if (old) old.remove();
+        const icon = type === 'success' ? '\u2713' : '!';
+        const o = document.createElement('div'); o.className = 'cf-pop';
+        o.innerHTML = '<div class="cf-card ' + type + '" role="dialog" aria-modal="true" aria-labelledby="cfTitle">' +
+            '<div class="cf-ico">' + icon + '</div><h3 id="cfTitle">' + title + '</h3><div class="cf-msg">' + html + '</div>' +
+            '<button type="button" class="cf-ok">OK</button></div>';
+        document.body.appendChild(o);
+        const ok = o.querySelector('.cf-ok');
+        const close = () => { o.classList.add('out'); document.removeEventListener('keydown', onKey); setTimeout(() => { o.remove(); btn.focus({ preventScroll: true }); }, 220); };
+        const onKey = ev => { if (ev.key === 'Escape') close(); };
+        ok.addEventListener('click', close);
+        o.addEventListener('click', ev => { if (ev.target === o) close(); });
+        document.addEventListener('keydown', onKey);
+        requestAnimationFrame(() => { o.classList.add('in'); ok.focus({ preventScroll: true }); });
+    }
     function fallback(name, mail, msg, why) {
         const subj = 'Portfolio inquiry from ' + name, body = msg + '\n\n- ' + name + ' (' + mail + ')';
         st.innerHTML = 'I couldn’t send it automatically, but your message is ready. Pick how you’d like to send it:' +
@@ -1613,6 +1632,7 @@ html[data-theme="dark"] .tm-btn:hover,html[data-theme="dark"] .tm-btn[aria-expan
             (wa ? '<a target="_blank" rel="noopener noreferrer" href="https://wa.me/' + wa + '?text=' + enc(subj + '\n\n' + msg) + '"><i class="fab fa-whatsapp"></i> WhatsApp</a>' : '') +
             '</span>';
         if (why) { const n = document.createElement('small'); n.className = 'c-why'; n.textContent = 'Technical note: ' + why; st.appendChild(n); }
+        popup('warn', 'Couldn’t send automatically', st.innerHTML); st.innerHTML = '';
     }
     // returns {ok:true} or {ok:false, reason:'...'}; throws only on network problems
     async function deliver(name, mail, msg) {
@@ -1641,17 +1661,17 @@ html[data-theme="dark"] .tm-btn:hover,html[data-theme="dark"] .tm-btn[aria-expan
         const name = el['name'].value.trim(), mail = el['email'].value.trim(), msg = el['message'].value.trim();
         const ok = { name: !!name, email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail), message: !!msg };
         ['name', 'email', 'message'].forEach(k => el[k].parentElement.classList.toggle('invalid', !ok[k]));
-        if (!ok.name || !ok.email || !ok.message) { st.textContent = 'Please add your name, a valid email and your message.'; return; }
-        btn.disabled = true; st.textContent = 'Sending…';
+        if (!ok.name || !ok.email || !ok.message) { popup('error', 'Missing details', 'Please add your name, a valid email and your message.'); return; }
+        btn.disabled = true; st.textContent = ''; const btnHTML = btn.innerHTML; btn.textContent = 'Sending…';
         let res;
         try { res = await deliver(name, mail, msg); }
         catch (err) {
             console.warn('Contact form error:', err);
             res = { ok: false, reason: (location.protocol === 'file:' ? 'This page is opened as a local file, and browsers block sending from there. It works once the site is hosted online. ' : '') + (err && err.message ? '(' + err.message + ')' : 'Network error') };
         }
-        if (res.ok) { st.textContent = 'Thank you! Your message was sent. I’ll get back to you soon.'; f.reset(); }
+        if (res.ok) { popup('success', 'Message sent!', 'Thank you! Your message was sent. I’ll get back to you soon.'); f.reset(); }
         else fallback(name, mail, msg, res.reason);
-        btn.disabled = false;
+        btn.innerHTML = btnHTML; btn.disabled = false;
     });
 })();
 </script>
@@ -2030,11 +2050,12 @@ document.addEventListener('pointermove', function (e) {
 <!-- ===== EXTRA MOTION 2: drifting sparkles, drawn title underlines, button shine ===== -->
 <style id="fx2-css">
 .fx-drift{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
-.fx-drift i{position:absolute;bottom:-8%;font-style:normal;line-height:1;color:var(--accent2);opacity:0;
-  animation:fxRise var(--t,18s) linear var(--w,0s) infinite}
-@keyframes fxRise{0%{opacity:0;transform:translate(0,0) rotate(0) scale(.6)}12%{opacity:.5}
-  50%{transform:translate(var(--sx,20px),-55vh) rotate(120deg) scale(1)}88%{opacity:.35}
-  100%{opacity:0;transform:translate(calc(var(--sx,20px) * -1),-112vh) rotate(260deg) scale(.7)}}
+.fx-drift i{position:absolute;font-style:normal;line-height:1;color:var(--accent2);opacity:.3;
+  animation:fxHover var(--t,12s) ease-in-out var(--w,0s) infinite,fxGlow var(--g,4s) ease-in-out var(--w,0s) infinite}
+@keyframes fxHover{0%,100%{transform:translate(0,0) rotate(0)}25%{transform:translate(var(--sx,14px),calc(var(--sy,12px) * -1)) rotate(12deg)}
+  50%{transform:translate(calc(var(--sx,14px) * -.6),var(--sy,12px)) rotate(-8deg)}75%{transform:translate(calc(var(--sx,14px) * .5),calc(var(--sy,12px) * .6)) rotate(6deg)}}
+@keyframes fxGlow{0%,100%{opacity:.22;scale:.8;text-shadow:0 0 0 rgba(217,141,108,0)}
+  50%{opacity:.95;scale:1.25;text-shadow:0 0 6px rgba(240,183,157,.95),0 0 16px rgba(217,141,108,.75),0 0 30px rgba(184,92,56,.45)}}
 h2.text-3xl .text-accent{background:linear-gradient(100deg,var(--accent) 35%,#f0b79d 50%,var(--accent) 65%) 0 0/250% 100%;
   -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:fxShine 6s ease-in-out infinite}
 .btn-primary:hover,.btn-secondary:hover,.hire-btn:hover{background-image:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.3) 50%,transparent 70%);
@@ -2050,7 +2071,7 @@ h2.text-3xl .text-accent{background:linear-gradient(100deg,var(--accent) 35%,#f0
     var g=['✦','✧','✦','·','✦'];
     for(var i=0;i<16;i++){
       var s=document.createElement('i');s.textContent=g[i%g.length];
-      s.style.cssText='left:'+(Math.random()*96)+'%;font-size:'+(10+Math.random()*16)+'px;--t:'+(16+Math.random()*16)+'s;--w:-'+(Math.random()*24)+'s;--sx:'+((Math.random()-.5)*90)+'px';
+      s.style.cssText='left:'+(2+Math.random()*94)+'%;top:'+(4+Math.random()*90)+'%;font-size:'+(10+Math.random()*16)+'px;--t:'+(9+Math.random()*9)+'s;--g:'+(3+Math.random()*3.5)+'s;--w:-'+(Math.random()*10)+'s;--sx:'+(8+Math.random()*16)+'px;--sy:'+(8+Math.random()*14)+'px';
       box.appendChild(s);
     }
     document.body.appendChild(box);
@@ -2063,5 +2084,127 @@ h2.text-3xl .text-accent{background:linear-gradient(100deg,var(--accent) 35%,#f0
 })();
 </script>
 
+<style id="cf-css">
+.c-send{translate:none !important;transition:background .25s,color .25s,box-shadow .25s}
+.c-send:hover:not(:disabled){transform:none !important;animation:none !important;background-image:none !important;background:var(--accent);color:#fff;box-shadow:0 10px 22px -12px rgba(184,92,56,.65)}
+.hire-btn{translate:none !important;transition:background .25s,color .25s,border-color .25s,box-shadow .25s}
+.hire-btn:hover{transform:none !important;animation:none !important;background-image:none !important;background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 10px 22px -12px rgba(184,92,56,.65)}
+.cf-pop{position:fixed;inset:0;z-index:10050;display:grid;place-items:center;padding:1.25rem;background:rgba(15,23,42,.45);backdrop-filter:blur(3px);opacity:0;transition:opacity .22s}
+.cf-pop.in{opacity:1}.cf-pop.out{opacity:0}
+.cf-card{width:100%;max-width:25rem;padding:1.8rem 1.6rem 1.4rem;border-radius:1.2rem;text-align:center;background:#fff;color:#1e293b;border:1px solid rgba(229,231,235,.95);
+  box-shadow:0 30px 70px -20px rgba(15,23,42,.55);transform:translateY(14px) scale(.92);transition:transform .3s cubic-bezier(.2,1.3,.4,1)}
+html[data-theme="dark"] .cf-card{background:#1e293b;color:#f4f1e8;border-color:rgba(148,163,184,.25)}
+.cf-pop.in .cf-card{transform:none}
+.cf-ico{width:3.4rem;height:3.4rem;margin:0 auto .9rem;display:grid;place-items:center;border-radius:50%;font-size:1.6rem;font-weight:700;line-height:1;color:#fff;background:var(--accent);box-shadow:0 0 0 6px rgba(184,92,56,.15)}
+.cf-card.success .cf-ico{background:#22a06b;box-shadow:0 0 0 6px rgba(34,160,107,.18)}
+.cf-pop.in .cf-ico{animation:cfPop .5s cubic-bezier(.2,1.4,.4,1) .1s both}
+@keyframes cfPop{from{transform:scale(.3);opacity:0}to{transform:scale(1);opacity:1}}
+.cf-card h3{font-family:inherit;font-weight:700;font-size:1.2rem;margin:0 0 .4rem}
+.cf-msg{font-size:.93rem;line-height:1.55;opacity:.85}
+.cf-msg .c-alt{justify-content:center}
+.cf-msg .c-why{display:block;margin-top:.7rem;font-size:.75rem;opacity:.7}
+.cf-ok{margin-top:1.2rem;padding:.65rem 2.2rem;border:0;border-radius:.7rem;font-weight:600;cursor:pointer;background:var(--ink);color:var(--on-ink);transition:background .25s,color .25s}
+.cf-ok:hover{background:var(--accent);color:#fff}
+</style>
+<style id="jt-css">
+.jt-head{text-align:center;margin-bottom:3.2rem}
+.jt-head h2{display:inline-block;margin:0 0 .9rem !important}
+.jt-eye{display:block;margin-bottom:.8rem;font-size:.74rem;font-weight:600;letter-spacing:.34em;text-transform:uppercase;color:var(--accent)}
+.jt-sub{max-width:34rem;margin:0 auto;color:var(--muted);line-height:1.6}
+.jt-list{position:relative;max-width:66rem;margin:0 auto}
+.jt-line{position:absolute;left:50%;top:0;bottom:0;width:2px;margin-left:-1px;border-radius:2px;background:var(--line)}
+.jt-fill{position:absolute;left:0;top:0;width:100%;height:0;border-radius:2px;background:linear-gradient(var(--accent2),var(--accent) 60%,#e0687a);box-shadow:0 0 10px rgba(217,141,108,.8),0 0 24px rgba(184,92,56,.4)}
+.jt-fill::after{content:"✦";position:absolute;left:50%;bottom:-8px;transform:translateX(-50%);font-size:15px;line-height:1;color:var(--accent2);text-shadow:0 0 8px var(--accent),0 0 18px var(--accent);animation:jtHead 1.6s ease-in-out infinite}
+@keyframes jtHead{0%,100%{scale:.85;opacity:.8}50%{scale:1.35;opacity:1}}
+.jt-item{position:relative;width:50%;padding:0 3.4rem 2.6rem 0}
+.jt-item:nth-of-type(even){margin-left:50%;padding:0 0 2.6rem 3.4rem}
+.jt-node{position:absolute;top:1.5rem;right:-1.2rem;width:2.4rem;height:2.4rem;display:grid;place-items:center;border-radius:50%;border:2px solid var(--line);color:var(--muted);background:#fff;z-index:2;transition:border-color .5s,color .5s,box-shadow .5s,scale .5s cubic-bezier(.2,1.6,.4,1)}
+html[data-theme="dark"] .jt-node{background:#0f172a}
+.jt-item:nth-of-type(even) .jt-node{right:auto;left:-1.2rem}
+.jt-node svg{width:1.05rem;height:1.05rem}
+.jt-item.on .jt-node{border-color:var(--accent);color:var(--accent);scale:1.12;box-shadow:0 0 0 5px rgba(184,92,56,.16),0 0 18px rgba(217,141,108,.75)}
+.jt-item.on .jt-node::after{content:"";position:absolute;inset:-2px;border-radius:50%;border:2px solid var(--accent);animation:jtPing 1.3s ease-out 1}
+@keyframes jtPing{from{transform:scale(1);opacity:.9}to{transform:scale(2.6);opacity:0}}
+.jt-card{padding:1.6rem 1.7rem;border-radius:1.25rem;border:1px solid var(--line);background:var(--panel);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);animation:none !important;
+  transition:opacity .8s ease,transform .9s cubic-bezier(.2,.8,.2,1),border-color .35s,box-shadow .5s}
+.jt-card:hover{border-color:var(--accent);transform:translateY(-3px) !important}
+.jt-date{display:block;margin-bottom:.55rem;font-size:.72rem;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--muted)}
+.jt-card h3{margin:0}
+.jt-ul{margin-top:1.1rem}
+.jt-card .jt-ul li{transition:opacity .6s ease,transform .7s cubic-bezier(.2,.8,.2,1);transition-delay:calc(.3s + var(--i,0) * .12s)}
+/* scroll-in animation only when JS is running, so the content never gets stuck hidden */
+.jt-js .jt-card{opacity:0;transform:translateX(-38px) scale(.97)}
+.jt-js .jt-item:nth-of-type(even) .jt-card{transform:translateX(38px) scale(.97)}
+.jt-js .jt-item.on .jt-card{opacity:1;transform:none;box-shadow:0 20px 50px -26px rgba(184,92,56,.6)}
+.jt-js .jt-card .jt-ul li{opacity:0;transform:translateX(-16px)}
+.jt-js .jt-item.on .jt-card .jt-ul li{opacity:1;transform:none}
+@media(max-width:859px){
+  .jt-line{left:1.2rem;margin-left:0}
+  .jt-item,.jt-item:nth-of-type(even){width:100%;margin-left:0;padding:0 0 2.2rem 3.7rem}
+  .jt-node,.jt-item:nth-of-type(even) .jt-node{left:0;right:auto}
+  .jt-js .jt-item:not(.on) .jt-card,.jt-js .jt-item:nth-of-type(even):not(.on) .jt-card{transform:translateX(30px) scale(.97)}
+  .jt-card{padding:1.3rem 1.2rem}
+}
+</style>
+<script>
+(function(){
+  try{
+    var list=document.getElementById('jtList');if(!list)return;
+    var fill=list.querySelector('.jt-fill'),items=[].slice.call(list.querySelectorAll('.jt-item'));
+    items.forEach(function(it){[].forEach.call(it.querySelectorAll('.jt-ul li'),function(li,i){li.style.setProperty('--i',i)})});
+    document.getElementById('experience').classList.add('jt-js');
+    var tick=false;
+    function update(){
+      tick=false;var r=list.getBoundingClientRect();if(!r.height)return;
+      var mid=innerHeight*.6,p=Math.max(0,Math.min(r.height,mid-r.top));
+      fill.style.height=p+'px';
+      items.forEach(function(it){var n=it.querySelector('.jt-node').getBoundingClientRect();if(n.top+n.height/2<=mid+60&&n.top<innerHeight)it.classList.add('on')});
+    }
+    function req(){if(!tick){tick=true;requestAnimationFrame(update)}}
+    addEventListener('scroll',req,{passive:true});addEventListener('resize',req);
+    addEventListener('hashchange',function(){[80,400,900,1600].forEach(function(t){setTimeout(req,t)})});
+    document.addEventListener('click',function(){[120,600,1200].forEach(function(t){setTimeout(req,t)})});
+    req();setTimeout(req,800);
+  }catch(err){}
+})();
+</script>
+<!-- ===== HERO PHOTO: floating, orbiting sparkles, pulsing aura, tilt on hover ===== -->
+<style id="orb-css">
+.h2-wrap{position:relative;flex:none;animation:orbBob 6s ease-in-out infinite;perspective:600px}
+@keyframes orbBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.h2-wrap .h2-photo{transition:transform .25s ease-out,box-shadow .4s;transform:rotateX(var(--tx,0deg)) rotateY(var(--ty,0deg)) scale(var(--sc,1))}
+.h2-wrap:hover .h2-photo{--sc:1.04;box-shadow:0 0 0 8px rgba(184,92,56,.14),0 20px 50px -14px rgba(184,92,56,.7)}
+.orb{position:absolute;inset:-14px;pointer-events:none;border-radius:50%}
+.orb::before,.orb::after{content:"";position:absolute;inset:12px;border-radius:50%;border:1.5px solid var(--accent);opacity:0;animation:orbPulse 3.6s ease-out infinite}
+.orb::after{animation-delay:1.8s}
+@keyframes orbPulse{0%{transform:scale(.92);opacity:.55}100%{transform:scale(1.2);opacity:0}}
+.orb-ring{position:absolute;inset:0;border-radius:50%;border:1px dashed rgba(184,92,56,.35);animation:orbSpin 22s linear infinite}
+.orb-ring.r2{inset:7px;border-style:dotted;border-color:rgba(217,141,108,.45);animation-duration:15s;animation-direction:reverse}
+@keyframes orbSpin{to{transform:rotate(360deg)}}
+.orb-ring i{position:absolute;left:50%;top:0;margin:-8px 0 0 -8px;width:16px;height:16px;font-style:normal;font-size:15px;line-height:16px;text-align:center;color:var(--accent);
+  text-shadow:0 0 8px rgba(240,183,157,.95),0 0 16px rgba(217,141,108,.7);animation:orbTw 2.8s ease-in-out infinite}
+.orb-ring i:nth-child(2){top:auto;bottom:0;margin:0 0 -8px -8px;font-size:11px;color:var(--accent2);animation-delay:-1s}
+.orb-ring i:nth-child(3){left:0;top:50%;margin:-6px 0 0 -6px;font-size:9px;animation-delay:-1.8s}
+.orb-ring.r2 i{font-size:10px;color:var(--accent2)}
+@keyframes orbTw{0%,100%{opacity:.5;scale:.8}50%{opacity:1;scale:1.3}}
+@media(max-width:639px){.orb{inset:-10px}}
+</style>
+<script>
+(function(){
+  try{
+    var ph=document.querySelector('#home .h2-photo');if(!ph||ph.parentNode.classList.contains('h2-wrap'))return;
+    var wrap=document.createElement('div');wrap.className='h2-wrap';
+    ph.parentNode.insertBefore(wrap,ph);wrap.appendChild(ph);
+    var o=document.createElement('div');o.className='orb';o.setAttribute('aria-hidden','true');
+    o.innerHTML='<div class="orb-ring"><i>✦</i><i>✦</i><i>✧</i></div><div class="orb-ring r2"><i>✦</i><i>·</i></div>';
+    wrap.appendChild(o);
+    wrap.addEventListener('mousemove',function(e){
+      var r=wrap.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
+      ph.style.setProperty('--ty',(x*16)+'deg');ph.style.setProperty('--tx',(-y*16)+'deg');
+    });
+    wrap.addEventListener('mouseleave',function(){ph.style.setProperty('--ty','0deg');ph.style.setProperty('--tx','0deg')});
+  }catch(err){}
+})();
+</script>
 </body>
 </html>
