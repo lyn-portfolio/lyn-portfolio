@@ -2,7 +2,7 @@
 // The site's own files are fetched fresh from the network first (so updates show up right away) and
 // fall back to the saved copy when offline; fonts and the icon font are served from the cache and
 // refreshed in the background. Bump VERSION to drop old caches.
-const VERSION = 'v2';
+const VERSION = 'v3';
 const CACHE = 'lyn-' + VERSION;
 const CORE = ['./', 'index.html', 'style.css', 'script.js', 'assets/lyn-photo.jpg', 'manifest.webmanifest',
               'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png'];
